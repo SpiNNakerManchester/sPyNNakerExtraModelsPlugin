@@ -2,7 +2,6 @@ from spynnaker_extra_pynn_models import model_binaries
 
 
 def _init_module():
-    import logging
     import os
     import spynnaker.pyNN
 

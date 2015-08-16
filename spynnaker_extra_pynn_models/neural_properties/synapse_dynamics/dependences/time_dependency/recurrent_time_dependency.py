@@ -1,3 +1,6 @@
+"""
+RecurrentTimeDependency
+"""
 import math
 
 from data_specification.enums.data_type import DataType
@@ -10,8 +13,11 @@ from spynnaker.pyNN.models.neural_properties.synapse_dynamics.\
 from spynnaker.pyNN.models.neural_properties.synapse_dynamics\
     import plasticity_helpers
 
+import hashlib
+
 
 class RecurrentTimeDependency(AbstractTimeDependency):
+
     def __init__(self, accumulator_depression=-6, accumulator_potentiation=6,
                  mean_pre_window=35.0, mean_post_window=35.0, dual_fsm=False):
         AbstractTimeDependency.__init__(self)
@@ -87,3 +93,6 @@ class RecurrentTimeDependency(AbstractTimeDependency):
 
             p = round(p_float)
             spec.write_value(data=p, data_type=DataType.UINT16)
+
+    def get_component_magic_number_identifiers(self):
+        return hashlib.md5("timing_recurrent_duel_fsm_impl").hexdigest()[:8]

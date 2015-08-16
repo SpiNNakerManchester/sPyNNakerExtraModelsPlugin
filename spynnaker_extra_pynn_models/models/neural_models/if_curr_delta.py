@@ -1,12 +1,14 @@
 """
 IFCurrentDeltaPopulation
 """
-from spynnaker.pyNN.models.abstract_models.abstract_population_vertex import \
-    AbstractPopulationVertex
-from abstract_delta_population_vertex import AbstractDeltaPopulationVertex
-from spynnaker.pyNN.models.abstract_models.abstract_model_components.\
-    abstract_integrate_and_fire_properties \
-    import AbstractIntegrateAndFireProperties
+from spynnaker.pyNN.models.components.neuron_components.\
+    abstract_population_vertex import AbstractPopulationVertex
+from spynnaker_extra_pynn_models.models.components.synapse_shaping_components.\
+    delta_component import DeltaComponent
+from spynnaker.pyNN.models.components.model_components.\
+    integrate_and_fire_component import IntegrateAndFireComponent
+from spynnaker.pyNN.models.components.inputs_components.current_component \
+    import CurrentComponent
 from spynnaker.pyNN.models.neural_properties.neural_parameter \
     import NeuronParameter
 
@@ -14,9 +16,9 @@ from spynnaker.pyNN.models.neural_properties.neural_parameter \
 from data_specification.enums.data_type import DataType
 
 
-class IFCurrentDeltaPopulation(AbstractDeltaPopulationVertex,
-                               AbstractIntegrateAndFireProperties,
-                               AbstractPopulationVertex):
+class IFCurrentDeltaPopulation(
+        DeltaComponent, IntegrateAndFireComponent, CurrentComponent,
+        AbstractPopulationVertex):
     """
     IFCurrentDeltaPopulation: model which represents a leaky integate
     and fire neural model with current-based delta synapses.
@@ -29,9 +31,10 @@ class IFCurrentDeltaPopulation(AbstractDeltaPopulationVertex,
                  label=None, tau_m=20.0, cm=1.0, v_rest=-65.0, v_reset=-65.0,
                  v_thresh=-50.0, tau_refrac=0.1,
                  i_offset=0, v_init=None):
-
         # Instantiate the parent classes
-        AbstractIntegrateAndFireProperties.__init__(
+        DeltaComponent.__init__(self)
+        CurrentComponent.__init__(self)
+        IntegrateAndFireComponent.__init__(
             self, atoms=n_neurons, cm=cm, tau_m=tau_m, i_offset=i_offset,
             v_init=v_init, v_reset=v_reset, v_rest=v_rest, v_thresh=v_thresh,
             tau_refrac=tau_refrac)
@@ -135,9 +138,16 @@ class IFCurrentDeltaPopulation(AbstractDeltaPopulationVertex,
         """
         return True
 
-    def is_delta_vertex(self):
+    def is_delta_shaped(self):
         """
+        helper method for isinstance
+        :return:
+        """
+        return True
 
+    def is_current_component(self):
+        """
+        helper method for is instance
         :return:
         """
         return True
