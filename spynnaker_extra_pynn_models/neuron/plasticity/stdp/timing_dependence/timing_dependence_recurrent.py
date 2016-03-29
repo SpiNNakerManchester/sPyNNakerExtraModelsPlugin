@@ -3,21 +3,21 @@ import numpy
 
 from data_specification.enums.data_type import DataType
 
-from spynnaker.pyNN.models.neural_properties.synapse_dynamics.abstract_rules.\
-    abstract_time_dependency import AbstractTimeDependency
-from spynnaker.pyNN.models.neural_properties.synapse_dynamics.\
-    plastic_weight_control_synapse_row_io\
-    import PlasticWeightControlSynapseRowIo
-from spynnaker.pyNN.models.neural_properties.synapse_dynamics\
+from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence.\
+    abstract_timing_dependence import AbstractTimingDependence
+from spynnaker_extra_pynn_models.neuron.plasticity.stdp\
+    .synapse_structure.synapse_structure_weight_accumulator \
+    import SynapseStructureWeightAccumulator
+from spynnaker.pyNN.models.neuron.plasticity.stdp.common \
     import plasticity_helpers
 
 
-class RecurrentTimeDependency(AbstractTimeDependency):
+class RecurrentTimeDependency(AbstractTimingDependence):
     def __init__(
             self, accumulator_depression=-6, accumulator_potentiation=6,
             mean_pre_window=35.0, mean_post_window=35.0, dual_fsm=True,
             seed=None):
-        AbstractTimeDependency.__init__(self)
+        AbstractTimingDependence.__init__(self)
 
         self.accumulator_depression_plus_one = accumulator_depression + 1
         self.accumulator_potentiation_minus_one = accumulator_potentiation - 1
@@ -26,8 +26,11 @@ class RecurrentTimeDependency(AbstractTimeDependency):
         self.dual_fsm = dual_fsm
         self.rng = numpy.random.RandomState(seed)
 
-    def __eq__(self, other):
-        if (other is None) or (not isinstance(other, RecurrentTimeDependency)):
+        self._synapse_structure = SynapseStructureWeightAccumulator()
+
+    def is_same_as(self, other):
+        if (other is None) or (not isinstance(
+                other, RecurrentTimeDependency)):
             return False
         return ((self.accumulator_depression_plus_one ==
                  other.accumulator_depression_plus_one) and
@@ -36,23 +39,32 @@ class RecurrentTimeDependency(AbstractTimeDependency):
                 (self.mean_pre_window == other.mean_pre_window) and
                 (self.mean_post_window == other.mean_post_window))
 
-    def create_synapse_row_io(self, synaptic_row_header_words,
-                              dendritic_delay_fraction):
-        return PlasticWeightControlSynapseRowIo(
-            synaptic_row_header_words, dendritic_delay_fraction, False)
+    @property
+    def vertex_executable_suffix(self):
+        if self.dual_fsm:
+            return "recurrent_dual_fsm"
+        return "recurrent_pre_stochastic"
 
-    def get_params_size_bytes(self):
+    @property
+    def pre_trace_n_bytes(self):
+
+        # When using the seperate FSMs, pre-trace contains window length,
+        # otherwise it's in the synapse
+        return 2 if self.dual_fsm else 0
+
+    def get_parameters_sdram_usage_in_bytes(self):
+
         # 2 * 32-bit parameters
         # 2 * LUTS with STDP_FIXED_POINT_ONE * 16-bit entries
-        # 4 seeds
         return (
             (4 * 2) + (2 * (2 * plasticity_helpers.STDP_FIXED_POINT_ONE)) + 16)
 
-    def is_time_dependance_rule_part(self):
-        return True
+    @property
+    def n_weight_terms(self):
+        return 1
 
-    def write_plastic_params(self, spec, machineTimeStep, weight_scales,
-                             global_weight_scale):
+    def write_parameters(self, spec, machine_time_step, weight_scales):
+
         # Write parameters
         spec.write_value(data=self.accumulator_depression_plus_one,
                          data_type=DataType.INT32)
@@ -61,14 +73,10 @@ class RecurrentTimeDependency(AbstractTimeDependency):
 
         # Convert mean times into machine timesteps
         mean_pre_timesteps = (float(self.mean_pre_window) *
-                              (1000.0 / float(machineTimeStep)))
+                              (1000.0 / float(machine_time_step)))
         mean_post_timesteps = (float(self.mean_post_window) *
-                               (1000.0 / float(machineTimeStep)))
-
-        # Write lookup tables
-        self._write_exp_dist_lut(spec, mean_pre_timesteps)
-        self._write_exp_dist_lut(spec, mean_post_timesteps)
-
+                               (1000.0 / float(machine_time_step)))
+        
         # Write random seeds
         spec.write_value(data=self.rng.randint(0x7FFFFFFF),
                          data_type=DataType.UINT32)
@@ -79,21 +87,19 @@ class RecurrentTimeDependency(AbstractTimeDependency):
         spec.write_value(data=self.rng.randint(0x7FFFFFFF),
                          data_type=DataType.UINT32)
 
-    @property
-    def num_terms(self):
-        return 1
-
-    @property
-    def vertex_executable_suffix(self):
-        if self.dual_fsm:
-            return "recurrent_dual_fsm"
-        return "recurrent_pre_stochastic"
-
+        # Write lookup tables
+        self._write_exp_dist_lut(spec, mean_pre_timesteps)
+        self._write_exp_dist_lut(spec, mean_post_timesteps)
+        
     @property
     def pre_trace_size_bytes(self):
         # When using the separate FSMs, pre-trace contains window length,
         # otherwise it's in the synapse
         return 2 if self.dual_fsm else 0
+    
+    @property
+    def num_terms(self):
+        return 1
 
     def _write_exp_dist_lut(self, spec, mean):
         for x in range(plasticity_helpers.STDP_FIXED_POINT_ONE):
@@ -104,3 +110,7 @@ class RecurrentTimeDependency(AbstractTimeDependency):
 
             p = round(p_float)
             spec.write_value(data=p, data_type=DataType.UINT16)
+
+    @property
+    def synaptic_structure(self):
+        return self._synapse_structure
