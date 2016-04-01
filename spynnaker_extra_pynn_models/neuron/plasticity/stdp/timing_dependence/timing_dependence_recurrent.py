@@ -12,7 +12,7 @@ from spynnaker.pyNN.models.neuron.plasticity.stdp.common \
     import plasticity_helpers
 
 
-class RecurrentTimeDependency(AbstractTimingDependence):
+class TimingDependenceRecurrent(AbstractTimingDependence):
     def __init__(
             self, accumulator_depression=-6, accumulator_potentiation=6,
             mean_pre_window=35.0, mean_post_window=35.0, dual_fsm=True,
@@ -30,7 +30,7 @@ class RecurrentTimeDependency(AbstractTimingDependence):
 
     def is_same_as(self, other):
         if (other is None) or (not isinstance(
-                other, RecurrentTimeDependency)):
+                other, TimingDependenceRecurrent)):
             return False
         return ((self.accumulator_depression_plus_one ==
                  other.accumulator_depression_plus_one) and
@@ -76,7 +76,7 @@ class RecurrentTimeDependency(AbstractTimingDependence):
                               (1000.0 / float(machine_time_step)))
         mean_post_timesteps = (float(self.mean_post_window) *
                                (1000.0 / float(machine_time_step)))
-        
+
         # Write random seeds
         spec.write_value(data=self.rng.randint(0x7FFFFFFF),
                          data_type=DataType.UINT32)
@@ -90,13 +90,13 @@ class RecurrentTimeDependency(AbstractTimingDependence):
         # Write lookup tables
         self._write_exp_dist_lut(spec, mean_pre_timesteps)
         self._write_exp_dist_lut(spec, mean_post_timesteps)
-        
+
     @property
     def pre_trace_size_bytes(self):
         # When using the separate FSMs, pre-trace contains window length,
         # otherwise it's in the synapse
         return 2 if self.dual_fsm else 0
-    
+
     @property
     def num_terms(self):
         return 1
