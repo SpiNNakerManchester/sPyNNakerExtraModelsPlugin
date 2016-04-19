@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="sPyNNakerExtraModelsPlugin",
-    version="2015.003.01",
+    version="2016.001",
     description="Extra models not in PyNN",
     url="https://github.com/SpiNNakerManchester/sPyNNakerExtraModelsPlugin",
     packages=['spynnaker_extra_pynn_models',
