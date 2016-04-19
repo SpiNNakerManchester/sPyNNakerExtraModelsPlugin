@@ -18,4 +18,6 @@ class SynapseStructureWeightAccumulator(AbstractSynapseStructure):
         return plastic_plastic.view(dtype="uint8").reshape((-1, 4))
 
     def read_synaptic_data(self, fp_size, pp_data):
-        return (numpy.concatenate(pp_data) >> 16) & 0xFFFF
+        return (numpy.concatenate([
+            pp_data[i].view(dtype="uint32")[0:fp_size[i]]
+            for i in range(len(pp_data))]) >> 16) & 0xFFFF
