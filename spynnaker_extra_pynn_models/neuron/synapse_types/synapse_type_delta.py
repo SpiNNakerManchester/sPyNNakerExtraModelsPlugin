@@ -6,8 +6,28 @@ class SynapseTypeDelta(AbstractSynapseType):
     """ This represents a synapse type with two delta synapses
     """
 
-    def __init__(self):
+    @staticmethod
+    def default_parameters():
+        return {}
+
+    @staticmethod
+    def fixed_parameters():
+        return {}
+
+    @staticmethod
+    def state_variables():
+        params = list()
+        return params
+
+    @staticmethod
+    def is_array_parameters():
+        return {}
+
+    def __init__(self, bag_of_neurons):
         AbstractSynapseType.__init__(self)
+
+        self._n_neurons = len(bag_of_neurons)
+        self._atoms = bag_of_neurons
 
     def get_n_synapse_types(self):
         return 2
