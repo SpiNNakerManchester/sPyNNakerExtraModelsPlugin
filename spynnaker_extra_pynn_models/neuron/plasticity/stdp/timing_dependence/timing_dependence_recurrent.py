@@ -47,7 +47,7 @@ class TimingDependenceRecurrent(AbstractTimingDependence):
     @property
     def pre_trace_n_bytes(self):
 
-        # When using the seperate FSMs, pre-trace contains window length,
+        # When using the separate FSMs, pre-trace contains window length,
         # otherwise it's in the synapse
         return 2 if self.dual_fsm else 0
 
