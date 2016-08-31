@@ -69,7 +69,11 @@ class IFCurrExpCa2Adaptive(AbstractPopulationVertex):
             constraints=constraints)
 
     @staticmethod
-    def set_model_max_atoms_per_core(new_value):
+    def get_max_atoms_per_core():
+        return IFCurrExpCa2Adaptive._model_based_max_atoms_per_core
+
+    @staticmethod
+    def set_max_atoms_per_core(new_value):
         """
 
         :param new_value:

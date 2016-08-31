@@ -57,7 +57,7 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
     def get_n_parameters(self):
         return 3
 
-    @inject_items({"machine_time_step", "MachineTimeStep"})
+    @inject_items({"machine_time_step": "MachineTimeStep"})
     def get_parameters(self, machine_time_step):
         return [
             NeuronParameter(

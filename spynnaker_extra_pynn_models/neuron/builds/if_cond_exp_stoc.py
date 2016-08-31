@@ -58,5 +58,9 @@ class IFCondExpStoc(AbstractPopulationVertex):
             threshold_type=threshold_type, constraints=constraints)
 
     @staticmethod
-    def set_model_max_atoms_per_core(new_value):
+    def get_max_atoms_per_core():
+        return IFCondExpStoc._model_based_max_atoms_per_core
+
+    @staticmethod
+    def set_max_atoms_per_core(new_value):
         IFCondExpStoc._model_based_max_atoms_per_core = new_value
