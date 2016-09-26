@@ -27,9 +27,4 @@ class IFCurrDelta(BagOfNeuronsVertex):
 
     @staticmethod
     def set_model_max_atoms_per_core(new_value):
-        """
-
-        :param new_value:
-        :return:
-        """
         IFCurrDelta.model_based_max_atoms_per_core = new_value

@@ -1,4 +1,4 @@
-from spynnaker.pyNN.utilities import utility_calls
+from pacman.executor.injection_decorator import inject_items
 from spynnaker.pyNN.models.neural_properties.neural_parameter \
     import NeuronParameter
 from data_specification.enums.data_type import DataType
@@ -57,18 +57,19 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
     def i_alpha(self, i_alpha):
         self._set_param('i_alpha', i_alpha, self._atoms)
 
-    def _exp_tau_ca2(self, atom_id):
-        return numpy.exp(float(
-            -self._atoms[atom_id].population_parameters["machine_time_step"]) /
+    def _exp_tau_ca2(self, atom_id, machine_time_step):
+        return numpy.exp(
+            float(-machine_time_step) /
             (1000.0 * self._atoms[atom_id].get('tau_ca2')))
 
     def get_n_parameters(self):
         return 3
 
-    def get_parameters(self, atom_id):
+    @inject_items({"machine_time_step": "MachineTimeStep"})
+    def get_parameters(self, atom_id, machine_time_step):
         return [
             NeuronParameter(
-                self._exp_tau_ca2(atom_id), DataType.S1615),
+                self._exp_tau_ca2(atom_id, machine_time_step), DataType.S1615),
             NeuronParameter(
                 self._atoms[atom_id].get('i_ca2'), DataType.S1615),
             NeuronParameter(

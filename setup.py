@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="sPyNNakerExtraModelsPlugin",
-    version="2016.001",
+    version="3.0.0",
     description="Extra models not in PyNN",
     url="https://github.com/SpiNNakerManchester/sPyNNakerExtraModelsPlugin",
     packages=['spynnaker_extra_pynn_models',
@@ -19,5 +19,5 @@ setup(
               'spynnaker_extra_pynn_models.neuron.plasticity.stdp.synapse_structure',
               'spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence'],
     package_data={'spynnaker_extra_pynn_models.model_binaries': ['*.aplx']},
-    install_requires=['SpyNNaker == 2016.001']
+    install_requires=['SpyNNaker >= 3.0.0, < 4.0.0']
 )
