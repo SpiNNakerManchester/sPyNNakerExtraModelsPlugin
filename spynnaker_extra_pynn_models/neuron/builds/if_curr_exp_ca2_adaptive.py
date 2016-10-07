@@ -30,8 +30,7 @@ class IFCurrExpCa2Adaptive(AbstractPopulationVertex):
         'tau_ca2': 50.0, "i_ca2": 0.0, "i_alpha": 0.1}
 
     def __init__(
-            self, n_neurons, machine_time_step, timescale_factor,
-            spikes_per_second=None, ring_buffer_sigma=None,
+            self, n_neurons, spikes_per_second=None, ring_buffer_sigma=None,
             incoming_spike_buffer_size=None,
             constraints=None, label=None,
             tau_m=default_parameters['tau_m'], cm=default_parameters['cm'],
@@ -47,22 +46,20 @@ class IFCurrExpCa2Adaptive(AbstractPopulationVertex):
             i_alpha=default_parameters["i_alpha"], v_init=None):
 
         neuron_model = NeuronModelLeakyIntegrateAndFire(
-            n_neurons, machine_time_step, v_init, v_rest, tau_m, cm, i_offset,
+            n_neurons, v_init, v_rest, tau_m, cm, i_offset,
             v_reset, tau_refrac)
         synapse_type = SynapseTypeExponential(
-            n_neurons, machine_time_step, tau_syn_E, tau_syn_I)
+            n_neurons, tau_syn_E, tau_syn_I)
         input_type = InputTypeCurrent()
         threshold_type = ThresholdTypeStatic(n_neurons, v_thresh)
         additional_input = AdditionalInputCa2Adaptive(
-            n_neurons, machine_time_step, tau_ca2, i_ca2, i_alpha)
+            n_neurons, tau_ca2, i_ca2, i_alpha)
 
         AbstractPopulationVertex.__init__(
             self, n_neurons=n_neurons, binary="IF_curr_exp_ca2_adaptive.aplx",
             label=label,
-            max_atoms_per_core=
-            IFCurrExpCa2Adaptive._model_based_max_atoms_per_core,
-            machine_time_step=machine_time_step,
-            timescale_factor=timescale_factor,
+            max_atoms_per_core=(
+                IFCurrExpCa2Adaptive._model_based_max_atoms_per_core),
             spikes_per_second=spikes_per_second,
             ring_buffer_sigma=ring_buffer_sigma,
             incoming_spike_buffer_size=incoming_spike_buffer_size,
@@ -72,7 +69,11 @@ class IFCurrExpCa2Adaptive(AbstractPopulationVertex):
             constraints=constraints)
 
     @staticmethod
-    def set_model_max_atoms_per_core(new_value):
+    def get_max_atoms_per_core():
+        return IFCurrExpCa2Adaptive._model_based_max_atoms_per_core
+
+    @staticmethod
+    def set_max_atoms_per_core(new_value):
         """
 
         :param new_value:
