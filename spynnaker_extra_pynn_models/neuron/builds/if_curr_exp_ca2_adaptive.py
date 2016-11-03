@@ -1,5 +1,5 @@
-from spynnaker.pyNN.models.neuron.bag_of_neurons_vertex import \
-    BagOfNeuronsVertex
+from spynnaker.pyNN.models.neuron.population_application_vertex import \
+    PopulationApplicationVertex
 from spynnaker.pyNN.models.neuron.neuron_models\
     .neuron_model_leaky_integrate_and_fire \
     import NeuronModelLeakyIntegrateAndFire
@@ -14,7 +14,7 @@ from spynnaker_extra_pynn_models.neuron\
     import AdditionalInputCa2Adaptive
 
 
-class IFCurrExpCa2Adaptive(BagOfNeuronsVertex):
+class IFCurrExpCa2Adaptive(PopulationApplicationVertex):
     """ Model from Liu, Y. H., & Wang, X. J. (2001). Spike-frequency\
         adaptation of a generalized leaky integrate-and-fire model neuron. \
         Journal of Computational Neuroscience, 10(1), 25-45. \

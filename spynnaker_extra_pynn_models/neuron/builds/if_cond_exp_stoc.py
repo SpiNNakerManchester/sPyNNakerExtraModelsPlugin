@@ -1,5 +1,5 @@
-from spynnaker.pyNN.models.neuron.bag_of_neurons_vertex import \
-    BagOfNeuronsVertex
+from spynnaker.pyNN.models.neuron.population_application_vertex import \
+    PopulationApplicationVertex
 from spynnaker.pyNN.models.neuron.neuron_models\
     .neuron_model_leaky_integrate_and_fire \
     import NeuronModelLeakyIntegrateAndFire
@@ -11,7 +11,7 @@ from spynnaker_extra_pynn_models.neuron.threshold_types\
     .threshold_type_maass_stochastic import ThresholdTypeMaassStochastic
 
 
-class IFCondExpStoc(BagOfNeuronsVertex):
+class IFCondExpStoc(PopulationApplicationVertex):
 
     model_based_max_atoms_per_core = 255
 

@@ -29,41 +29,41 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
     def is_array_parameters():
         return {}
 
-    def __init__(self, bag_of_neurons):
+    def __init__(self, neuron_cells):
         AbstractThresholdType.__init__(self)
 
-        self._n_neurons = len(bag_of_neurons)
-        self._atoms = bag_of_neurons
+        self._n_neurons = len(neuron_cells)
+        self._neuron_cells = neuron_cells
 
     @property
     def v_thresh(self):
-        return self._get_param('v_thresh', self._atoms)
+        return self._get_param('v_thresh', self._neuron_cells)
 
     @v_thresh.setter
     def v_thresh(self, v_thresh):
-        self._set_param('v_thresh', v_thresh, self._atoms)
+        self._set_param('v_thresh', v_thresh, self._neuron_cells)
 
     @property
     def du_th(self):
-        return self._get_param('du_th', self._atoms)
+        return self._get_param('du_th', self._neuron_cells)
 
     @du_th.setter
     def du_th(self, du_th):
-        self._set_param('du_th', du_th, self._atoms)
+        self._set_param('du_th', du_th, self._neuron_cells)
 
     @property
     def tau_th(self):
-        return self._get_param('tau_th', self._atoms)
+        return self._get_param('tau_th', self._neuron_cells)
 
     @tau_th.setter
     def tau_th(self, tau_th):
-        self._set_param('tau_th', tau_th, self._atoms)
+        self._set_param('tau_th', tau_th, self._neuron_cells)
 
     def _du_th_inv(self, atom_id):
-        return numpy.divide(1.0, self._atoms[atom_id].get('du_th'))
+        return numpy.divide(1.0, self._neuron_cells[atom_id].get('du_th'))
 
     def _tau_th_inv(self, atom_id):
-        return numpy.divide(1.0, self._atoms[atom_id].get('tau_th'))
+        return numpy.divide(1.0, self._neuron_cells[atom_id].get('tau_th'))
 
     def get_n_threshold_parameters(self):
         return 3
@@ -73,7 +73,7 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
             NeuronParameter(self._du_th_inv(atom_id), DataType.S1615),
             NeuronParameter(self._tau_th_inv(atom_id), DataType.S1615),
             NeuronParameter(
-                self._atoms[atom_id].get('v_thresh'), DataType.S1615)
+                self._neuron_cells[atom_id].get('v_thresh'), DataType.S1615)
         ]
 
     def get_n_cpu_cycles_per_neuron(self):

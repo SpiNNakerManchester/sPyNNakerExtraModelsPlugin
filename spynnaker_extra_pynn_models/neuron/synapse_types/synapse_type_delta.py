@@ -23,11 +23,11 @@ class SynapseTypeDelta(AbstractSynapseType):
     def is_array_parameters():
         return {}
 
-    def __init__(self, bag_of_neurons):
+    def __init__(self, neuron_cells):
         AbstractSynapseType.__init__(self)
 
-        self._n_neurons = len(bag_of_neurons)
-        self._atoms = bag_of_neurons
+        self._n_neurons = len(neuron_cells)
+        self._neuron_cells = neuron_cells
 
     def get_n_synapse_types(self):
         return 2
