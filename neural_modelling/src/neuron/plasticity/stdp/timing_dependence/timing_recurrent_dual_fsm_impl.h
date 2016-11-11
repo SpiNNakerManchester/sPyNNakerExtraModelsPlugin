@@ -11,6 +11,7 @@ typedef uint16_t pre_trace_t;
 
 #include "neuron/plasticity/stdp/timing_dependence/timing.h"
 #include "neuron/plasticity/stdp/weight_dependence/weight_one_term.h"
+#include "neuron/threshold_types/threshold_type_static.h"
 
 // Include debug header for log_info etc
 #include <debug.h>
@@ -39,6 +40,10 @@ static uint32_t last_event_time;
 extern uint32_t last_spike;
 
 extern uint32_t recurrentSeed[4];
+
+extern accum *last_voltage;
+extern accum *voltage_before_last_spike;
+extern threshold_type_pointer_t threshold_type_array;
 
 #define ACCUM_SCALING	10
 // was ACCUM_SCALING 10
@@ -103,11 +108,12 @@ static inline pre_trace_t timing_add_pre_spike(
 static inline update_state_t timing_apply_pre_spike(
         uint32_t time, pre_trace_t trace, uint32_t last_pre_time,
         pre_trace_t last_pre_trace, uint32_t last_post_time,
-        post_trace_t last_post_trace, update_state_t previous_state) {
+        post_trace_t last_post_trace, update_state_t previous_state, uint32_t postNeuronIndex) {
     use(&trace);
     use(&last_pre_time);
     use(&last_pre_trace);
 
+    log_info("E!");
     //io_printf(IO_BUF, "delayed_time= %d	last_post_time=%d	pre_trace= %d	last_pre_trace= %d post_close= %u",
     //     time, last_post_time, trace, last_pre_trace, previous_state.longest_post_pre_window_closing_time);
 	// Decay accum value so that long periods without spikes cause it to forget:
@@ -151,7 +157,7 @@ static inline update_state_t timing_apply_pre_spike(
                 // If accumulator's not going to hit depression limit,
                 // decrement it
                 previous_state.accumulator = previous_state.accumulator - (1<<ACCUM_SCALING);
-                //io_printf(IO_BUF, "	-");
+                io_printf(IO_BUF, "-");
                 //io_printf(IO_BUF, "- A=%d t= %d lastPostTime: %d",
                 //         previous_state.accumulator, time, last_post_time);
             } else {
@@ -160,9 +166,17 @@ static inline update_state_t timing_apply_pre_spike(
                 //io_printf(IO_BUF, "DEP! A=%d t= %d lastPost=%d",
                 //        previous_state.accumulator, time, last_post_time);
 
+                io_printf(IO_BUF,"b %u", previous_state.weight_state.weight);
                 previous_state.accumulator = 0;
                 previous_state.weight_state = weight_one_term_apply_depression(
                     previous_state.weight_state, STDP_FIXED_POINT_ONE);
+                io_printf(IO_BUF,"a %u", previous_state.weight_state.weight);
+                //previous_state.weight_state = weight_one_term_apply_depression(
+                //    previous_state.weight_state, STDP_FIXED_POINT_ONE);
+                //! SD: weight change scaled by error term:
+                //state_t myThresh = threshold_type_array[postNeuronIndex];
+                //previous_state.weight_state = previous_state.weight_state; // *
+                  //(myThresh - voltage_before_last_spike[3]);
             }
     }
 
@@ -191,11 +205,12 @@ static inline update_state_t timing_apply_pre_spike(
 static inline update_state_t timing_apply_post_spike(
         uint32_t time, post_trace_t trace, uint32_t last_pre_time,
         pre_trace_t last_pre_trace, uint32_t last_post_time,
-        post_trace_t last_post_trace, update_state_t previous_state) {
+        post_trace_t last_post_trace, update_state_t previous_state, uint32_t postNeuronIndex) {
 	use(&trace);
 	use(&last_post_time);
 	use(&last_post_trace);
 
+    log_info("O!");
 	// Generate a windw size for this post-spike and extend the post window if it is
 	// beyond the current value:
 	uint32_t random = mars_kiss64_seed(recurrentSeed) & (STDP_FIXED_POINT_ONE - 1);
@@ -242,18 +257,21 @@ static inline update_state_t timing_apply_post_spike(
                 // If accumulator's not going to hit potentiation limit,
                 // increment it
                 previous_state.accumulator = previous_state.accumulator + (1<<ACCUM_SCALING);
-                //io_printf(IO_BUF, "	+");
+                io_printf(IO_BUF, "+");
                 //io_printf(IO_BUF, "		+ A= %d t= %d, lastPreTime= %d",
                 //         previous_state.accumulator, time, last_pre_time);
             } else {
+                io_printf(IO_BUF,"W: %d, ", previous_state.weight_state.weight);
 
                 // Otherwise, reset accumulator and apply potentiation
                 //io_printf(IO_BUF, "		Pot! A= %d t= %d, lastPreTime= %d",
                 //          previous_state.accumulator, time, last_pre_time);
                 previous_state.accumulator = 0;
+                //io_printf(IO_BUF,"B %u ", previous_state.weight_state.weight);
                 previous_state.weight_state =
                     weight_one_term_apply_potentiation(
                         previous_state.weight_state, STDP_FIXED_POINT_ONE);
+                io_printf(IO_BUF,"A %u ", previous_state.weight_state.weight);
             }
         }
     }

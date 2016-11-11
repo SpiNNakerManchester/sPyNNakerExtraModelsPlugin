@@ -88,7 +88,7 @@ static inline pre_trace_t timing_add_pre_spike(
 static inline update_state_t timing_apply_pre_spike(
     uint32_t time, pre_trace_t trace, uint32_t last_pre_time,
     pre_trace_t last_pre_trace, uint32_t last_post_time,
-    post_trace_t last_post_trace, update_state_t previous_state)
+    post_trace_t last_post_trace, update_state_t previous_state, uint32_t postNeuronIndex)
 {
   use(&trace);
   use(last_pre_time);
@@ -110,7 +110,7 @@ static inline update_state_t timing_apply_pre_spike(
 static inline update_state_t timing_apply_post_spike(
     uint32_t time, post_trace_t trace, uint32_t last_pre_time,
     pre_trace_t last_pre_trace, uint32_t last_post_time,
-    post_trace_t last_post_trace, update_state_t previous_state)
+    post_trace_t last_post_trace, update_state_t previous_state, uint32_t postNeuronIndex)
 {
   use(&trace);
   use(last_post_time);
