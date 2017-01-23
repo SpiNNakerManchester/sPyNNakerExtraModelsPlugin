@@ -66,6 +66,32 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
             NeuronParameter(self._i_alpha, DataType.S1615)
         ]
 
+    def set_parameters(self, parameters, vertex_slice):
+        """ sets the parameters from a list into the internal data items
+
+        :param parameters: the parameters to set
+        :param vertex_slice: which atoms to set
+        :return: None
+        """
+        position_in_data = 0
+        for atom in range(vertex_slice.lo_atom, vertex_slice.hi_atom):
+            self._i_ca2[atom] = parameters[position_in_data]
+            self._i_alpha[atom] = parameters[position_in_data + 1]
+            self._tau_ca2[atom] = self._translate_exp_tau_ca2_to_tau_ca2(
+                parameters[position_in_data + 2])
+            position_in_data += self.get_n_parameters()
+
+    @inject_items({"machine_time_step": "MachineTimeStep"})
+    def _translate_exp_tau_ca2_to_tau_ca2(
+            self, exp_tau_ca2, machine_time_step):
+        """ converts between exp_tau_ca2_to_tau_ca2
+
+        :param exp_tau_ca2: the original
+        :param machine_time_step: the machine time step
+        :return: the converted value
+        """
+        return float(-machine_time_step) / (exp_tau_ca2 * 1000.0)
+
     def get_n_cpu_cycles_per_neuron(self):
         return 3
 
