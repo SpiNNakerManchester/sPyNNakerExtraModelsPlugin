@@ -72,6 +72,7 @@ static inline post_trace_t timing_add_post_spike(
               window_length);
 			  */
     // Return window length
+    log_info("\t\tt: %d Add post-S", time);
     return 0; //window_length;
 }
 
@@ -87,13 +88,9 @@ static inline pre_trace_t timing_add_pre_spike(
     // Pick random number and use to draw from exponential distribution
     uint32_t random = mars_kiss64_seed(recurrentSeed) & (STDP_FIXED_POINT_ONE - 1);
     uint16_t window_length = pre_exp_dist_lookup[random];
-	//io_printf(IO_BUF, "%u\n", window_length);
-	//io_printf(IO_BUF, "AddPre t: %d  wl: %d\n", time, window_length);
-    log_debug("\t\tResetting pre-window: random=%d, window_length=%u", random,
-              window_length);
+    //log_info("\tt: %d Add pre-S winLen= %u, winClose= %d", time, window_length, time+window_length);
 
     // Return window length
-    //io_printf(IO_BUF, "Pre window: %u\n", window_length);
     return window_length;
 }
 
@@ -113,43 +110,36 @@ static inline update_state_t timing_apply_pre_spike(
     use(&last_pre_time);
     use(&last_pre_trace);
 
-    log_info("E!");
-    //io_printf(IO_BUF, "delayed_time= %d	last_post_time=%d	pre_trace= %d	last_pre_trace= %d post_close= %u",
-    //     time, last_post_time, trace, last_pre_trace, previous_state.longest_post_pre_window_closing_time);
 	// Decay accum value so that long periods without spikes cause it to forget:
     uint32_t time_since_last_event = time - last_event_time;
-    int32_t old_accum = previous_state.accumulator;
+
     if (previous_state.accumulator > 0) {
-        previous_state.accumulator -= time_since_last_event; // was >>2
+        previous_state.accumulator -= time_since_last_event>>4; // was >>2
+        //log_info("Acc: %d (diff) %d\n", previous_state.accumulator, time_since_last_event);
         if (previous_state.accumulator < 0) {
             previous_state.accumulator = 0;
         }
     } else if (previous_state.accumulator < 0) {
-        previous_state.accumulator += time_since_last_event; // was >>2
+        previous_state.accumulator += time_since_last_event>>4; // was >>2
         if (previous_state.accumulator > 0) {
             previous_state.accumulator = 0;
         }
     }
 
-    //io_printf(IO_BUF, "Pre-S: t: %d, old: %d, new: %d,  t-diff: %u  ", time, old_accum, previous_state.accumulator, time_since_last_event);
+    //log_info("W: %d, A: %d, long: %d\n", previous_state.weight_state, previous_state.accumulator, previous_state.longest_post_pre_window_closing_time);
 
-	// Set pre_waiting_post flag, priming the pre_waiting_post state machine. 
-	// A subsequent post is then able to trigger an accum update...
-	//io_printf(IO_BUF, "AppPre Waiting1=%u PreWinClsTime: %u\n",
-    //                     previous_state.pre_waiting_post, trace);
+        //log_info("\tt: %d App pre-S: last_pre_time:%d, last_pre_trace:%d, last_post_time %d, newAcc: %d",
+        //                        time, last_pre_time, last_pre_trace, last_post_time, previous_state.accumulator);
 
 	// Check if there was a post window open when this pre arrived and if so,
 	// trigger an accum decrement (a step towards synaptic depression):
-
 	if ((time > last_post_time) && (time < previous_state.longest_post_pre_window_closing_time)) {
 		// The pre-spike has occurred inside a post window.
-                //SDio_printf(IO_BUF, "win_cls: %u", previous_state.longest_post_pre_window_closing_time);
 
         // Get time of event relative to last post-synaptic event
         uint32_t time_since_last_post = time - last_post_time;
 
-        log_debug("\t\t\ttime_since_last_post:%u, post_window_length:%u",
-                   time_since_last_post, last_post_trace);
+        //log_info("time_since_last_post:%u, post_window_length:%u", time_since_last_post, last_post_trace);
 
             if (previous_state.accumulator >
                 (plasticity_trace_region_data.accumulator_depression_plus_one<<ACCUM_SCALING)){
@@ -157,36 +147,26 @@ static inline update_state_t timing_apply_pre_spike(
                 // If accumulator's not going to hit depression limit,
                 // decrement it
                 previous_state.accumulator = previous_state.accumulator - (1<<ACCUM_SCALING);
-                io_printf(IO_BUF, "-");
-                //io_printf(IO_BUF, "- A=%d t= %d lastPostTime: %d",
-                //         previous_state.accumulator, time, last_post_time);
             } else {
 
                 // Otherwise, reset accumulator and apply depression
-                //io_printf(IO_BUF, "DEP! A=%d t= %d lastPost=%d",
-                //        previous_state.accumulator, time, last_post_time);
-
-                io_printf(IO_BUF,"b %u", previous_state.weight_state.weight);
+                log_info("Dep b4, W: %d, A: %d\n", previous_state.weight_state.weight, previous_state.accumulator);
                 previous_state.accumulator = 0;
                 previous_state.weight_state = weight_one_term_apply_depression(
                     previous_state.weight_state, STDP_FIXED_POINT_ONE);
-                io_printf(IO_BUF,"a %u", previous_state.weight_state.weight);
-                //previous_state.weight_state = weight_one_term_apply_depression(
-                //    previous_state.weight_state, STDP_FIXED_POINT_ONE);
+                log_info("Dep After, W: %d, A: %d\n", previous_state.weight_state.weight, previous_state.accumulator);
                 //! SD: weight change scaled by error term:
                 //state_t myThresh = threshold_type_array[postNeuronIndex];
                 //previous_state.weight_state = previous_state.weight_state; // *
                   //(myThresh - voltage_before_last_spike[3]);
             }
-    }
-
+        //log_info("\tt:%d  -  A=%d lastPostTime: %d", time, previous_state.accumulator, last_post_time);
+	}
 	// Set the post window to be just before this pre-spike. This is the only way I've found to
 	// reset it. It means that the first window length will be garbage.
 	previous_state.longest_post_pre_window_closing_time = time - 1;
 	previous_state.pre_waiting_post = true;
-	//io_printf(IO_BUF, "window status: %u\n", previous_state.pre_waiting_post);
 
-    //io_printf(IO_BUF, "\n");
     return previous_state;
 }
 
@@ -210,36 +190,28 @@ static inline update_state_t timing_apply_post_spike(
 	use(&last_post_time);
 	use(&last_post_trace);
 
-    log_info("O!");
 	// Generate a windw size for this post-spike and extend the post window if it is
 	// beyond the current value:
 	uint32_t random = mars_kiss64_seed(recurrentSeed) & (STDP_FIXED_POINT_ONE - 1);
         uint16_t window_length = post_exp_dist_lookup[random];
 	uint32_t this_window_close_time = time + window_length;
-	
-        //io_printf(IO_BUF, "delayed_time= %d	last_pre_time= %d    last_pre_trace= %d, post_window:=%u",
-        //   time, last_pre_time, last_pre_trace, window_length);
+
+    //log_info("\t\tt: %d App Post-S last_pre_time= %d last_pre_trace=%d preWinClose: %d",
+    //    time, last_pre_time, last_pre_trace, last_pre_time+last_pre_trace);
 	// Check if this post-spike extends the open window:
-	if (previous_state.longest_post_pre_window_closing_time < this_window_close_time)
-		previous_state.longest_post_pre_window_closing_time = this_window_close_time;
+	if (previous_state.longest_post_pre_window_closing_time < this_window_close_time) {
+	    previous_state.longest_post_pre_window_closing_time = this_window_close_time;
+	    //log_info("\t\tNew postWinClose: new win len=%d, close time =%d", window_length, this_window_close_time);
+	 }
 
-	//io_printf(IO_BUF, "AppPost  t: %d  wl: %d\n", time, window_length);
-	//io_printf(IO_BUF, "AppPost Waiting2=%u PostWinCls: %u\n",
-        //                    previous_state.pre_waiting_post, 
-        //	              previous_state.longest_post_pre_window_closing_time);
-
-    //io_printf(IO_BUF, "Post-S: t: %d, acc: %d,  last event: %u", time, previous_state.accumulator, last_event_time);
-    log_debug("\t\tResetting post-window: random=%d, window_length=%u", random,
-              window_length);
     //if (time > last_event_time) {
     //    last_event_time = time;
     //}
 
     // Get time of event relative to last pre-synaptic event
     uint32_t time_since_last_pre = time - last_pre_time;
-	//io_printf(IO_BUF, "Time since last pre: %u, window status: %u\n", time_since_last_pre, previous_state.pre_waiting_post);
-    log_debug("\t\t\ttime_since_last_pre:%u, pre_window_length:%u",
-              time_since_last_pre, last_pre_trace);
+	//log_info("\t\ttimeSinceLastPre:%u winStat: %u preWinLen:%u",
+    //          time_since_last_pre, previous_state.pre_waiting_post, last_pre_trace);
 
     // If spikes don't coincide
     if (previous_state.pre_waiting_post == true && time_since_last_pre > 0) {
@@ -249,34 +221,29 @@ static inline update_state_t timing_apply_post_spike(
 		previous_state.pre_waiting_post = false;
         //!!io_printf(IO_BUF, "Pre-Sp: %d, win close: %d\n", time_since_last_pre, last_pre_trace);
         // Now check if this post spike occurred in the open window created by the previous pre-spike:
+        //log_info("Acc to reach pot: %d, incr: %d",
+        //  plasticity_trace_region_data.accumulator_potentiation_minus_one<<ACCUM_SCALING,
+        //  (1<<ACCUM_SCALING));
         if (time_since_last_pre < last_pre_trace) {
-
-            if (previous_state.accumulator< 
+            if (previous_state.accumulator<
 				    (plasticity_trace_region_data.accumulator_potentiation_minus_one<<ACCUM_SCALING)) {
 
-                // If accumulator's not going to hit potentiation limit,
-                // increment it
+                // If accumulator's not going to hit potentiation limit, increment it:
+                log_info("\t\t+ t: %d  A=%d, lastPreTime: %d", time, previous_state.accumulator, last_pre_time);
                 previous_state.accumulator = previous_state.accumulator + (1<<ACCUM_SCALING);
-                io_printf(IO_BUF, "+");
-                //io_printf(IO_BUF, "		+ A= %d t= %d, lastPreTime= %d",
-                //         previous_state.accumulator, time, last_pre_time);
             } else {
-                io_printf(IO_BUF,"W: %d, ", previous_state.weight_state.weight);
+                // Otherwise, reset accumulator and apply potentiation:
+                //log_info("!+!");
+                log_info("\t\tPot b4, W: %d, A: %d", previous_state.weight_state.weight, previous_state.accumulator);
 
-                // Otherwise, reset accumulator and apply potentiation
-                //io_printf(IO_BUF, "		Pot! A= %d t= %d, lastPreTime= %d",
-                //          previous_state.accumulator, time, last_pre_time);
                 previous_state.accumulator = 0;
-                //io_printf(IO_BUF,"B %u ", previous_state.weight_state.weight);
-                previous_state.weight_state =
-                    weight_one_term_apply_potentiation(
-                        previous_state.weight_state, STDP_FIXED_POINT_ONE);
-                io_printf(IO_BUF,"A %u ", previous_state.weight_state.weight);
+                previous_state.weight_state = weight_one_term_apply_potentiation(previous_state.weight_state,
+                                                                                        STDP_FIXED_POINT_ONE);
+                log_info("\t\tPot afr, W: %u, A: %d", previous_state.weight_state.weight, previous_state.accumulator);
             }
         }
     }
 
-    //io_printf(IO_BUF, "\n");
     return previous_state;
 }
 
