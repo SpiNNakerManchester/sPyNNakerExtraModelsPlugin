@@ -10,6 +10,12 @@ virtualenv:
 before_install:
  - sudo apt-get install -qq python-numpy python-scipy
 
-before_script:
+install:
+  - pip install -r requirements-test.txt
   - python ./setup.py install
-script: "py.test ."
+
+script:
+  - py.test unittests
+  - flake8 examples spynnaker_extra_pynn_models
+  - flake8 unittests
+  # TODO Add testing/style-checking of neural_modelling
