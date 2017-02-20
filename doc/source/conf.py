@@ -362,6 +362,8 @@ MOCK_MODULES = ['scipy', 'scipy.stats']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
+sys.path.append(os.path.abspath('../..'))
+
 # Do the rst generation
 for f in os.listdir("."):
     if (os.path.isfile(f) and f.endswith(
