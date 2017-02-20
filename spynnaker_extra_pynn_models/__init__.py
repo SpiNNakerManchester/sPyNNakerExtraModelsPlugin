@@ -1,4 +1,4 @@
-import spynnaker_extra_pynn_models.model_binaries
+import spynnaker_extra_pynn_models.model_binaries as model_binaries
 
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta \
     import IFCurrDelta as IF_curr_delta
