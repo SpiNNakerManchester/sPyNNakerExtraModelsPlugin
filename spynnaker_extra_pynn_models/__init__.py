@@ -1,5 +1,3 @@
-from spynnaker_extra_pynn_models import model_binaries
-
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta \
     import IFCurrDelta as IF_curr_delta
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_exp_ca2_adaptive \
@@ -22,9 +20,11 @@ def _init_module():
     import os
     import spynnaker.pyNN
 
-    # Register this path with SpyNNaker
-    spynnaker.pyNN.register_binary_search_path(os.path.dirname(
-        model_binaries.__file__))
+    parent = os.path.dirname(__file__)
+    binary = os.path.join(parent,"model_binaries")
+    print binary
+    # Register model_binaries path with SpyNNaker
+    spynnaker.pyNN.register_binary_search_path(binary)
 
 
 _init_module()
