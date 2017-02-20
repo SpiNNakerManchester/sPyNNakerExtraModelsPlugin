@@ -1,5 +1,9 @@
 from setuptools import setup
 
+# short names to get line to fit for pep8
+ss = 'spynnaker_extra_pynn_models.neuron.plasticity.stdp.synapse_structure'
+std = 'spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence'
+
 setup(
     name="sPyNNakerExtraModelsPlugin",
     version="3.0.0",
@@ -16,8 +20,8 @@ setup(
               'spynnaker_extra_pynn_models.neuron.synapse_types',
               'spynnaker_extra_pynn_models.neuron.threshold_types',
               'spynnaker_extra_pynn_models.neuron.plasticity.stdp',
-              'spynnaker_extra_pynn_models.neuron.plasticity.stdp.synapse_structure',
-              'spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence'],
+              ss,
+              std],
     package_data={'spynnaker_extra_pynn_models.model_binaries': ['*.aplx']},
     install_requires=['SpyNNaker >= 3.0.0, < 4.0.0']
 )
