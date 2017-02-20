@@ -1,4 +1,3 @@
-from spynnaker_extra_pynn_models import model_binaries
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta \
     import IFCurrDelta as IF_curr_delta
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_exp_ca2_adaptive \
@@ -20,6 +19,7 @@ __all__ = ['IF_curr_delta', 'IF_curr_exp_ca2_adaptive', 'IF_cond_exp_stoc',
 def _init_module():
     # import logging
     import spynnaker.pyNN
+    from spynnaker_extra_pynn_models import model_binaries
 
     # Register this path with SpyNNaker
     spynnaker.pyNN.register_binary_search_path(os.path.dirname(
