@@ -2,9 +2,11 @@
 Simple Associative Memory
 """
 #!/usr/bin/python
-import spynnaker.pyNN as p
+import numpy
+import pylab
+import spynnaker7.pyNN as p
+
 import spynnaker_extra_pynn_models as q
-import numpy, pylab
 from pyNN.random import NumpyRNG, RandomDistribution
 
 p.setup(timestep=1.0, min_delay = 1.0, max_delay = 15.0)

@@ -15,8 +15,8 @@ $Id$
 """
 
 import pylab
+import spynnaker7.pyNN as sim
 
-import spynnaker.pyNN as sim
 import spynnaker_extra_pynn_models as q
 
 sim.setup(timestep=1.0, min_delay=1.0, max_delay=4.0)

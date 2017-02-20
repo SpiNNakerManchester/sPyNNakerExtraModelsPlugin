@@ -1,10 +1,9 @@
-
-import spynnaker.pyNN as sim
-import spynnaker_extra_pynn_models as extra_sim
-import spynnaker_external_devices_plugin.pyNN as ext
 import numpy
 import pylab
+import spynnaker7.pyNN as sim
 
+import spynnaker_external_devices_plugin.pyNN as ext
+import spynnaker_extra_pynn_models as extra_sim
 
 #-------------------------------------------------------------------
 # This example uses the sPyNNaker implementation of the inhibitory

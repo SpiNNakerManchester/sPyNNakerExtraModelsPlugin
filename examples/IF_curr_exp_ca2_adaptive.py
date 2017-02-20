@@ -9,8 +9,8 @@
 import math
 import numpy
 import pylab
+import spynnaker7.pyNN as sim
 
-import spynnaker.pyNN as sim
 import spynnaker_extra_pynn_models as q
 
 # Timestep (ms)
