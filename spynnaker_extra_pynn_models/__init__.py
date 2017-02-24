@@ -3,6 +3,7 @@ import os
 __all__ = ['IF_curr_delta', 'IF_curr_exp_ca2_adaptive', 'IF_cond_exp_stoc',
            'RecurrentRule', 'Vogels2011Rule', 'model_binaries']
 
+
 def _init_module():
     # import logging
     import spynnaker.pyNN
