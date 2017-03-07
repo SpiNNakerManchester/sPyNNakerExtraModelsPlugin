@@ -66,13 +66,10 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
             NeuronParameter(self._v_thresh, DataType.S1615)
         ]
 
-    def set_parameters(self, parameters, vertex_slice):
-        position_in_data = 0
-        for atom in range(vertex_slice.lo_atom, vertex_slice.hi_atom):
-            self._du_th_inv[atom] = parameters[position_in_data]
-            self._tau_th_inv[atom] = parameters[position_in_data + 1]
-            self._v_thresh[atom] = parameters[position_in_data + 2]
-            position_in_data += self.get_n_threshold_parameters()
+    def set_threshold_parameters(self, parameters, vertex_slice):
+        utility_calls.set_slice_values(
+            [self._du_th_inv, self._tau_th_inv, self._v_thresh],
+            parameters, vertex_slice)
 
     def get_n_cpu_cycles_per_neuron(self):
         return 30
