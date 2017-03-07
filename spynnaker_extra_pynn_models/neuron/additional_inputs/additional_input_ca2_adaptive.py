@@ -67,11 +67,7 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
             NeuronParameter(self._i_alpha, DataType.S1615)
         ]
 
-    @inject_items({"machine_time_step": "MachineTimeStep"})
-    @overrides(
-        AbstractAdditionalInput.set_parameters,
-        additional_arguments="machine_time_step")
-    def set_parameters(self, parameters, vertex_slice, machine_time_step):
+    def set_parameters(self, parameters, vertex_slice):
 
         # Can ignore anything that isn't a state variable
         self._i_ca_2[vertex_slice.slice] = parameters[1]
