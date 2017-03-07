@@ -66,9 +66,5 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
             NeuronParameter(self._v_thresh, DataType.S1615)
         ]
 
-    def set_threshold_parameters(self, parameters, vertex_slice):
-        # Ignored as no state variables
-        pass
-
     def get_n_cpu_cycles_per_neuron(self):
         return 30
