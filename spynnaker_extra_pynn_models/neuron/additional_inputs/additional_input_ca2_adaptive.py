@@ -72,12 +72,11 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
         AbstractAdditionalInput.set_parameters,
         additional_arguments="machine_time_step")
     def set_parameters(self, parameters, vertex_slice, machine_time_step):
-        utility_calls.set_slice_values(
-            [self._tau_ca2, self._i_ca2, self._i_alpha], parameters,
-            vertex_slice)
-        self._tau_ca2[vertex_slice.as_slice] = \
+        self._tau_ca2[vertex_slice.slice] = \
             self._translate_exp_tau_ca2_to_tau_ca2(
-                self._tau_ca_2[vertex_slice.as_slice], machine_time_step)
+                parameters[0], machine_time_step)
+        self._i_ca_2[vertex_slice.slice] = parameters[1]
+        self._i_alpha[vertex_slice.slice] = parameters[2]
 
     def _translate_exp_tau_ca2_to_tau_ca2(
             self, exp_tau_ca2, machine_time_step):
