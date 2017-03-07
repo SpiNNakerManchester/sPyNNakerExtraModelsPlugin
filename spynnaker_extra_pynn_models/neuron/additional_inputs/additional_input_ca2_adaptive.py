@@ -72,21 +72,9 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
         AbstractAdditionalInput.set_parameters,
         additional_arguments="machine_time_step")
     def set_parameters(self, parameters, vertex_slice, machine_time_step):
-        self._tau_ca2[vertex_slice.slice] = \
-            self._translate_exp_tau_ca2_to_tau_ca2(
-                parameters[0], machine_time_step)
+
+        # Can ignore anything that isn't a state variable
         self._i_ca_2[vertex_slice.slice] = parameters[1]
-        self._i_alpha[vertex_slice.slice] = parameters[2]
-
-    def _translate_exp_tau_ca2_to_tau_ca2(
-            self, exp_tau_ca2, machine_time_step):
-        """ converts between exp_tau_ca2_to_tau_ca2
-
-        :param exp_tau_ca2: the original
-        :param machine_time_step: the machine time step
-        :return: the converted value
-        """
-        return float(-machine_time_step) / (numpy.log(exp_tau_ca2) * 1000.0)
 
     def get_n_cpu_cycles_per_neuron(self):
         return 3
