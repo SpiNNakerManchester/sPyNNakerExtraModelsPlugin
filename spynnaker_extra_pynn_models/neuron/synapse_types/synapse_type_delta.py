@@ -28,5 +28,8 @@ class SynapseTypeDelta(AbstractSynapseType):
     def get_synapse_type_parameters(self):
         return []
 
+    def get_synapse_type_parameter_types(self):
+        return []
+
     def get_n_cpu_cycles_per_neuron(self):
         return 0

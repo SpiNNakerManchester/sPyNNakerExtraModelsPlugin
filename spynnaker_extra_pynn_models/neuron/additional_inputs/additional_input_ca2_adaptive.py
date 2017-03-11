@@ -7,6 +7,23 @@ from spynnaker.pyNN.models.neuron.additional_inputs.abstract_additional_input \
     import AbstractAdditionalInput
 
 import numpy
+from enum import Enum
+
+
+class _CA2_TYPES(Enum):
+    EXP_TAU_CA2 = (1, DataType.S1615)
+    I_CA2 = (2, DataType.S1615)
+    I_ALPHA = (3, DataType.S1615)
+
+    def __new__(cls, value, data_type):
+        obj = object.__new__(cls)
+        obj._value_ = value
+        obj._data_type = data_type
+        return obj
+
+    @property
+    def data_type(self):
+        return self._data_type
 
 
 class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
@@ -61,10 +78,14 @@ class AdditionalInputCa2Adaptive(AbstractAdditionalInput):
     def get_parameters(self, machine_time_step):
         return [
             NeuronParameter(
-                self._exp_tau_ca2(machine_time_step), DataType.S1615),
-            NeuronParameter(self._i_ca2, DataType.S1615),
-            NeuronParameter(self._i_alpha, DataType.S1615)
+                self._exp_tau_ca2(machine_time_step),
+                _CA2_TYPES.EXP_TAU_CA2.data_type),
+            NeuronParameter(self._i_ca2, _CA2_TYPES.I_CA2.data_type),
+            NeuronParameter(self._i_alpha, _CA2_TYPES.I_ALPHA.data_type)
         ]
+
+    def get_parameter_types(self):
+        return [item.data_type for item in _CA2_TYPES]
 
     def set_parameters(self, parameters, vertex_slice):
 

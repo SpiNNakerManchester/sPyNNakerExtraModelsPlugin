@@ -6,6 +6,23 @@ from spynnaker.pyNN.models.neuron.threshold_types.abstract_threshold_type \
     import AbstractThresholdType
 
 import numpy
+from enum import Enum
+
+
+class _MASS_TYPES(Enum):
+    DU_TH = (1, DataType.S1615)
+    TAU_TH = (2, DataType.S1615)
+    V_THRESH = (3, DataType.S1615)
+
+    def __new__(cls, value, data_type):
+        obj = object.__new__(cls)
+        obj._value_ = value
+        obj._data_type = data_type
+        return obj
+
+    @property
+    def data_type(self):
+        return self._data_type
 
 
 class ThresholdTypeMaassStochastic(AbstractThresholdType):
@@ -61,10 +78,13 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
 
     def get_threshold_parameters(self):
         return [
-            NeuronParameter(self._du_th_inv, DataType.S1615),
-            NeuronParameter(self._tau_th_inv, DataType.S1615),
-            NeuronParameter(self._v_thresh, DataType.S1615)
+            NeuronParameter(self._du_th_inv, _MASS_TYPES.DU_TH.data_type),
+            NeuronParameter(self._tau_th_inv, _MASS_TYPES.TAU_TH.data_type),
+            NeuronParameter(self._v_thresh, _MASS_TYPES.V_THRESH.data_type)
         ]
+
+    def get_threshold_parameter_types(self):
+        return [item.data_type for item in _MASS_TYPES]
 
     def get_n_cpu_cycles_per_neuron(self):
         return 30
