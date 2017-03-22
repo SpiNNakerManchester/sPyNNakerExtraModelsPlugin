@@ -1,5 +1,5 @@
 
-import spynnaker.pyNN as sim
+import spynnaker7.pyNN as sim
 import spynnaker_extra_pynn_models as extra_sim
 import spynnaker_external_devices_plugin.pyNN as ext
 

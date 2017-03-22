@@ -2,7 +2,7 @@
 """
 Simple Associative Memory
 """
-import spynnaker.pyNN as p
+import spynnaker7.pyNN as p
 import spynnaker_extra_pynn_models as q
 import pylab
 from pyNN.random import NumpyRNG, RandomDistribution
