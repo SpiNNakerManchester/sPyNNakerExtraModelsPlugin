@@ -26,5 +26,9 @@ class IFCurrDelta(PopulationApplicationVertex):
     model_name = "IF_curr_delta"
 
     @staticmethod
-    def set_model_max_atoms_per_core(new_value):
-        IFCurrDelta.model_based_max_atoms_per_core = new_value
+    def get_max_atoms_per_core():
+        return IFCurrDelta._model_based_max_atoms_per_core
+
+    @staticmethod
+    def set_max_atoms_per_core(new_value):
+        IFCurrDelta._model_based_max_atoms_per_core = new_value
