@@ -1,4 +1,4 @@
-import spynnaker.pyNN as sim
+import spynnaker7.pyNN as sim
 import spynnaker_extra_pynn_models as q
 import numpy
 import pylab
