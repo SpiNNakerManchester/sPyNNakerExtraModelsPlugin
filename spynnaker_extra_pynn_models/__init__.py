@@ -3,8 +3,10 @@ from spynnaker_extra_pynn_models import model_binaries
 #builds
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta \
     import IFCurrDelta as IF_curr_delta
+
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_exp_ca2_adaptive \
     import IFCurrExpCa2Adaptive as IF_curr_exp_ca2_adaptive
+
 from spynnaker_extra_pynn_models.neuron.builds.if_cond_exp_stoc \
     import IFCondExpStoc as IF_cond_exp_stoc
 
@@ -12,13 +14,16 @@ from spynnaker_extra_pynn_models.neuron.builds.if_cond_exp_stoc \
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker7_timing_dependence_recurrent\
     import TimingDependenceRecurrent as RecurrentRule
+
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker7_timing_dependence_vogels_2011\
     import TimingDependenceVogels2011 as Vogels2011Rule
+
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker7_timing_dependence_spike_nearest_pair import \
     TimingDependenceSpikeNearestPair as \
     SpYNNaker7TimingDependenceSpikeNearestPair
+
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker7_timing_dependence_pfister_spike_triplet import \
     TimingDependencePfisterSpikeTriplet as \
@@ -29,6 +34,7 @@ from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker8_timing_dependence_pfister_spike_triplet import \
     TimingDependencePfisterSpikeTriplet as \
     SpYNNaker8TimingDependencePfisterSpikeTriplet
+
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .spynnaker8_timing_dependence_spike_nearest_pair import \
     TimingDependenceSpikeNearestPair as \
@@ -46,8 +52,15 @@ from spynnaker_extra_pynn_models.neuron.plasticity.stdp.wight_dependence\
     WeightDependenceAdditiveTriplet as \
     SpYNNaker8WeightDependenceAdditiveTriplet
 
-__all__ = ['IF_curr_delta', 'IF_curr_exp_ca2_adaptive', 'IF_cond_exp_stoc',
-           'RecurrentRule', 'Vogels2011Rule', 'model_binaries']
+__all__ = [
+    'IF_curr_delta', 'IF_curr_exp_ca2_adaptive', 'IF_cond_exp_stoc',
+    'RecurrentRule', 'Vogels2011Rule', 'model_binaries',
+    'SpYNNaker8WeightDependenceAdditiveTriplet',
+    'SpYNNaker7WeightDependenceAdditiveTriplet',
+    'SpYNNaker8TimingDependenceSpikeNearestPair',
+    'SpYNNaker8TimingDependencePfisterSpikeTriplet',
+    'SpYNNaker7TimingDependencePfisterSpikeTriplet',
+    'SpYNNaker7TimingDependenceSpikeNearestPair']
 
 
 def _init_module():
