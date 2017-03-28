@@ -26,6 +26,14 @@ install:
   - pip install -r requirements-test.txt
   - python ./setup.py install
 
+before_script:
+  - echo '[Machine]' > ~/.spynnaker.cfg
+  - echo "machineName = $SPINNAKER_BOARD_ADDRESS" >> ~/.spynnaker.cfg
+  - echo "version = ${SPINNAKER_BOARD_VERSION:-5}" >> ~/.spynnaker.cfg
+  - echo '[Database]' >> ~/.spynnaker.cfg
+  - echo '[Simulation]' >> ~/.spynnaker.cfg
+  - echo '[Buffers]' >> ~/.spynnaker.cfg
+
 script:
   - py.test unittests
   - flake8 examples spynnaker_extra_pynn_models
