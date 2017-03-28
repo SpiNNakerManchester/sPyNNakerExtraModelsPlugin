@@ -1,6 +1,6 @@
 from spynnaker_extra_pynn_models import model_binaries
 
-#builds
+# builds spynnaker 7
 from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta \
     import IFCurrDelta as IF_curr_delta
 
@@ -9,6 +9,20 @@ from spynnaker_extra_pynn_models.neuron.builds.if_curr_exp_ca2_adaptive \
 
 from spynnaker_extra_pynn_models.neuron.builds.if_cond_exp_stoc \
     import IFCondExpStoc as IF_cond_exp_stoc
+
+# builds spynnaker 8
+from spynnaker_extra_pynn_models.neuron.builds.\
+    spynnaker8_if_curr_delta_data_holder \
+    import IfCurrDeltaDataHolder as Spynnaker8IF_curr_delta
+
+from spynnaker_extra_pynn_models.neuron.builds\
+    .spynnaker8_if_curr_exp_ca2_adaptive_data_holder \
+    import IfCurrExpCa2AdaptiveDataHolder as \
+    Spynnaker8IF_curr_exp_ca2_adaptive
+
+from spynnaker_extra_pynn_models.neuron.builds\
+    .spynnaker8_if_cond_exp_stoc_data_holder \
+    import IfCondExpStocDataHolder as Spynnaker8IF_cond_exp_stoc
 
 # plastic timing spynnaker 7
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
@@ -53,14 +67,26 @@ from spynnaker_extra_pynn_models.neuron.plasticity.stdp.wight_dependence\
     SpYNNaker8WeightDependenceAdditiveTriplet
 
 __all__ = [
+    # spynnaker 7 models
     'IF_curr_delta', 'IF_curr_exp_ca2_adaptive', 'IF_cond_exp_stoc',
-    'RecurrentRule', 'Vogels2011Rule', 'model_binaries',
-    'SpYNNaker8WeightDependenceAdditiveTriplet',
+
+    # spynnaker 8 models
+    'Spynnaker8IF_curr_delta', 'Spynnaker8IF_curr_exp_ca2_adaptive',
+    'Spynnaker8IF_cond_exp_stoc',
+
+    # extra
+    'model_binaries',
+
+    # spynnaker 7 plastic stuff
     'SpYNNaker7WeightDependenceAdditiveTriplet',
-    'SpYNNaker8TimingDependenceSpikeNearestPair',
-    'SpYNNaker8TimingDependencePfisterSpikeTriplet',
     'SpYNNaker7TimingDependencePfisterSpikeTriplet',
-    'SpYNNaker7TimingDependenceSpikeNearestPair']
+    'SpYNNaker7TimingDependenceSpikeNearestPair'
+    'RecurrentRule', 'Vogels2011Rule',
+
+    # spynnaker 8 plastic stuff
+    'SpYNNaker8WeightDependenceAdditiveTriplet',
+    'SpYNNaker8TimingDependenceSpikeNearestPair',
+    'SpYNNaker8TimingDependencePfisterSpikeTriplet']
 
 
 def _init_module():

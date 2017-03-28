@@ -21,17 +21,30 @@ class IFCurrDelta(AbstractPopulationVertex):
         'tau_m': 20.0, 'cm': 1.0, 'v_rest': -65.0, 'v_reset': -65.0,
         'v_thresh': -50.0, 'tau_refrac': 0.1, 'i_offset': 0}
 
+    none_pynn_default_parameters = {'v_init': None}
+
     # noinspection PyPep8Naming
     def __init__(
-            self, n_neurons, spikes_per_second=None, ring_buffer_sigma=None,
-            incoming_spike_buffer_size=None,
-            constraints=None, label=None,
+            self, n_neurons, spikes_per_second=
+            AbstractPopulationVertex.none_pynn_default_parameters[
+                'spikes_per_second'],
+            ring_buffer_sigma=
+            AbstractPopulationVertex.none_pynn_default_parameters[
+                'ring_buffer_sigma'],
+            incoming_spike_buffer_size=
+            AbstractPopulationVertex.none_pynn_default_parameters[
+                'incoming_spike_buffer_size'],
+            constraints=AbstractPopulationVertex.none_pynn_default_parameters[
+                'constraints'],
+            label=AbstractPopulationVertex.none_pynn_default_parameters[
+                'label'],
             tau_m=default_parameters['tau_m'], cm=default_parameters['cm'],
             v_rest=default_parameters['v_rest'],
             v_reset=default_parameters['v_reset'],
             v_thresh=default_parameters['v_thresh'],
             tau_refrac=default_parameters['tau_refrac'],
-            i_offset=default_parameters['i_offset'], v_init=None):
+            i_offset=default_parameters['i_offset'],
+            v_init=none_pynn_default_parameters['v_init']):
 
         neuron_model = NeuronModelLeakyIntegrateAndFire(
             n_neurons, v_init, v_rest, tau_m, cm, i_offset,
