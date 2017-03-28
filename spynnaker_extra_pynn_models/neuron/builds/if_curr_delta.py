@@ -70,9 +70,4 @@ class IFCurrDelta(AbstractPopulationVertex):
 
     @staticmethod
     def set_max_atoms_per_core(new_value):
-        """
-
-        :param new_value:
-        :return:
-        """
         IFCurrDelta._model_based_max_atoms_per_core = new_value
