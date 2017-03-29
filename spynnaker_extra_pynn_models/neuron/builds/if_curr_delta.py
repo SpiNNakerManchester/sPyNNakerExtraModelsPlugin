@@ -19,7 +19,8 @@ class IFCurrDelta(AbstractPopulationVertex):
 
     default_parameters = {
         'tau_m': 20.0, 'cm': 1.0, 'v_rest': -65.0, 'v_reset': -65.0,
-        'v_thresh': -50.0, 'tau_refrac': 0.1, 'i_offset': 0}
+        'v_thresh': -50.0, 'tau_refrac': 0.1, 'i_offset': 0, 'isyn_exc': 0.0,
+        'isyn_inh': 0.0}
 
     none_pynn_default_parameters = {'v_init': None}
 
@@ -44,12 +45,16 @@ class IFCurrDelta(AbstractPopulationVertex):
             v_thresh=default_parameters['v_thresh'],
             tau_refrac=default_parameters['tau_refrac'],
             i_offset=default_parameters['i_offset'],
-            v_init=none_pynn_default_parameters['v_init']):
+            v_init=none_pynn_default_parameters['v_init'],
+            isyn_exc=default_parameters['isyn_exc'],
+            isyn_inh=default_parameters['isyn_inh']):
 
         neuron_model = NeuronModelLeakyIntegrateAndFire(
             n_neurons, v_init, v_rest, tau_m, cm, i_offset,
             v_reset, tau_refrac)
-        synapse_type = SynapseTypeDelta()
+        synapse_type = SynapseTypeDelta(
+            n_neurons=n_neurons, initial_input_inh=isyn_inh,
+            initial_input_exc=isyn_exc)
         input_type = InputTypeCurrent()
         threshold_type = ThresholdTypeStatic(n_neurons, v_thresh)
 
