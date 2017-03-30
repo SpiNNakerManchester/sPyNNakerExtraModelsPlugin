@@ -12,58 +12,68 @@ class ThresholdTypeMaassStochastic(AbstractThresholdType):
     """ A stochastic threshold
     """
 
-    def __init__(self, n_neurons, du_th, tau_th, v_thresh):
-        AbstractThresholdType.__init__(self)
-        self._n_neurons = n_neurons
+    @staticmethod
+    def default_parameters():
+        return {'du_th': 0.5, 'tau_th': 20.0, 'v_thresh': -50.0}
 
-        self._du_th = utility_calls.convert_param_to_numpy(du_th, n_neurons)
-        self._tau_th = utility_calls.convert_param_to_numpy(tau_th, n_neurons)
-        self._v_thresh = utility_calls.convert_param_to_numpy(
-            v_thresh, n_neurons)
+    @staticmethod
+    def fixed_parameters():
+        return {}
+
+    @staticmethod
+    def state_variables():
+        params = list()
+        return params
+
+    @staticmethod
+    def is_array_parameters():
+        return {}
+
+    def __init__(self, neuron_cells):
+        AbstractThresholdType.__init__(self)
+
+        self._n_neurons = len(neuron_cells)
+        self._neuron_cells = neuron_cells
 
     @property
     def v_thresh(self):
-        return self._v_thresh
+        return self._get_param('v_thresh', self._neuron_cells)
 
     @v_thresh.setter
     def v_thresh(self, v_thresh):
-        self._v_thresh = utility_calls.convert_param_to_numpy(
-            v_thresh, self._n_neurons)
+        self._set_param('v_thresh', v_thresh, self._neuron_cells)
 
     @property
     def du_th(self):
-        return self._du_th
+        return self._get_param('du_th', self._neuron_cells)
 
     @du_th.setter
     def du_th(self, du_th):
-        self._du_th = utility_calls.convert_param_to_numpy(
-            du_th, self._n_neurons)
+        self._set_param('du_th', du_th, self._neuron_cells)
 
     @property
     def tau_th(self):
-        return self._tau_th
+        return self._get_param('tau_th', self._neuron_cells)
 
     @tau_th.setter
     def tau_th(self, tau_th):
-        self._tau_th = utility_calls.convert_param_to_numpy(
-            tau_th, self._n_neurons)
+        self._set_param('tau_th', tau_th, self._neuron_cells)
 
-    @property
-    def _du_th_inv(self):
-        return numpy.divide(1.0, self._du_th)
+    def _du_th_inv(self, atom_id):
+        return numpy.divide(1.0, self._neuron_cells[atom_id].get('du_th'))
 
-    @property
-    def _tau_th_inv(self):
-        return numpy.divide(1.0, self._tau_th)
+    def _tau_th_inv(self, atom_id):
+        return numpy.divide(1.0, self._neuron_cells[atom_id].get('tau_th'))
 
     def get_n_threshold_parameters(self):
         return 3
 
-    def get_threshold_parameters(self):
+    def get_threshold_parameters(self, atom_id):
         return [
-            NeuronParameter(self._du_th_inv, DataType.S1615),
-            NeuronParameter(self._tau_th_inv, DataType.S1615),
-            NeuronParameter(self._v_thresh, DataType.S1615)
+            NeuronParameter(self._du_th_inv(atom_id), DataType.S1615),
+            NeuronParameter(self._tau_th_inv(atom_id), DataType.S1615),
+            NeuronParameter(
+                self._neuron_cells[atom_id].get('v_thresh'), DataType.S1615)
         ]
 
     def get_n_cpu_cycles_per_neuron(self):
