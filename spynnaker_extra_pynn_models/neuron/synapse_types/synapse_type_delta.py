@@ -32,17 +32,30 @@ class SynapseTypeDelta(AbstractSynapseType):
         return "excitatory", "inhibitory"
 
     def get_n_synapse_type_parameters(self):
-        return 0
+        return 2
 
     def get_synapse_type_parameters(self):
-        return []
-
-    def get_n_cpu_cycles_per_neuron(self):
-        return 0
-
-    @overrides(AbstractSynapseType.get_synapse_type_initial_buffers_parameters)
-    def get_synapse_type_initial_buffers_parameters(self):
         return [
             NeuronParameter(self._initial_input_exc, DataType.S1615),
             NeuronParameter(self._initial_input_inh, DataType.S1615)
         ]
+
+    def get_n_cpu_cycles_per_neuron(self):
+        return 0
+
+    @property
+    def isyn_exc(self):
+        return self._initial_input_exc
+
+    @isyn_exc.setter
+    def isyn_exc(self, new_value):
+        self._initial_input_exc = new_value
+
+    @property
+    def isyn_inh(self):
+        return self._initial_input_inh
+
+    @isyn_inh.setter
+    def isyn_inh(self, new_value):
+        self._initial_input_inh = new_value
+
