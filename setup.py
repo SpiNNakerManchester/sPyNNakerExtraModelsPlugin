@@ -29,5 +29,5 @@ setup(
     description="Extra models not in PyNN",
     url="https://github.com/SpiNNakerManchester/sPyNNakerExtraModelsPlugin",
     packages=packages, package_data=package_data,
-    install_requires=['SpyNNaker >= 3.0.0, < 4.0.0']
+    install_requires=['SpyNNaker >= 4.0.0, < 5.0.0']
 )
