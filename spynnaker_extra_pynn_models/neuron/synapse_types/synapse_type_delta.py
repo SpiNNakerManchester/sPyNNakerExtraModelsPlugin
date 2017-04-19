@@ -60,4 +60,3 @@ class SynapseTypeDelta(AbstractSynapseType):
     @isyn_inh.setter
     def isyn_inh(self, new_value):
         self._initial_input_inh = new_value
-

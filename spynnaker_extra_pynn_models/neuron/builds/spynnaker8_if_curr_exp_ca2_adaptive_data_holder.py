@@ -8,15 +8,12 @@ from spynnaker_extra_pynn_models.neuron.builds.if_curr_exp_ca2_adaptive \
 class IfCurrExpCa2AdaptiveDataHolder(DataHolder):
 
     def __init__(
-            self, spikes_per_second=
-            AbstractPopulationVertex.none_pynn_default_parameters[
-                'spikes_per_second'],
-            ring_buffer_sigma=
-            AbstractPopulationVertex.none_pynn_default_parameters[
-                'ring_buffer_sigma'],
-            incoming_spike_buffer_size=
-            AbstractPopulationVertex.none_pynn_default_parameters[
-                'incoming_spike_buffer_size'],
+            self, spikes_per_second=AbstractPopulationVertex.
+            none_pynn_default_parameters['spikes_per_second'],
+            ring_buffer_sigma=AbstractPopulationVertex.
+            none_pynn_default_parameters['ring_buffer_sigma'],
+            incoming_spike_buffer_size=AbstractPopulationVertex.
+            none_pynn_default_parameters['incoming_spike_buffer_size'],
             constraints=AbstractPopulationVertex.none_pynn_default_parameters[
                 'constraints'],
             label=AbstractPopulationVertex.none_pynn_default_parameters[

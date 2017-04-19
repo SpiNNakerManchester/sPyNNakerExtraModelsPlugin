@@ -98,4 +98,5 @@ def _init_module():
     SpiNNakerCommon.register_binary_search_path(
         os.path.dirname(model_binaries.__file__))
 
+
 _init_module()
