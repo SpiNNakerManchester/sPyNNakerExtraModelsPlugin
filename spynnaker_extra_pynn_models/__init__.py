@@ -80,7 +80,7 @@ __all__ = [
     # spynnaker 7 plastic stuff
     'SpYNNaker7WeightDependenceAdditiveTriplet',
     'SpYNNaker7TimingDependencePfisterSpikeTriplet',
-    'SpYNNaker7TimingDependenceSpikeNearestPair'
+    'SpYNNaker7TimingDependenceSpikeNearestPair',
     'RecurrentRule', 'Vogels2011Rule',
 
     # spynnaker 8 plastic stuff
@@ -97,20 +97,5 @@ def _init_module():
     # Register this path with SpyNNaker
     SpiNNakerCommon.register_binary_search_path(
         os.path.dirname(model_binaries.__file__))
-
-    if os.environ.get('READTHEDOCS', None) != 'True':
-        from spynnaker_extra_pynn_models.neuron.builds.if_curr_delta import \
-            IFCurrDelta as IF_curr_delta
-        from spynnaker_extra_pynn_models.neuron.builds.\
-            if_curr_exp_ca2_adaptive \
-            import IFCurrExpCa2Adaptive as IF_curr_exp_ca2_adaptive
-        from spynnaker_extra_pynn_models.neuron.builds.if_cond_exp_stoc \
-            import IFCondExpStoc as IF_cond_exp_stoc
-        from spynnaker_extra_pynn_models.neuron.plasticity.stdp.\
-            timing_dependence.spynnaker7_timing_dependence_recurrent import \
-            TimingDependenceRecurrent as RecurrentRule
-        from spynnaker_extra_pynn_models.neuron.plasticity.stdp.\
-            timing_dependence.spynnaker7_timing_dependence_vogels_2011 \
-            import TimingDependenceVogels2011 as Vogels2011Rule
 
 _init_module()
