@@ -9,6 +9,9 @@ from spynnaker_extra_pynn_models.neuron.builds.if_cond_exp_stoc \
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .timing_dependence_recurrent\
     import TimingDependenceRecurrent as RecurrentRule
+from spynnaker_extra_pynn_models.neuron.plasticity.stdp.weight_dependence\
+    .weight_dependence_recurrent\
+    import WeightDependenceRecurrent as WeightDependenceRecurrent
 from spynnaker_extra_pynn_models.neuron.plasticity.stdp.timing_dependence\
     .timing_dependence_vogels_2011\
     import TimingDependenceVogels2011 as Vogels2011Rule
