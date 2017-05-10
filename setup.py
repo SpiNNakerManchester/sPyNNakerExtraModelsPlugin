@@ -2,6 +2,9 @@ from setuptools import setup
 
 from collections import defaultdict
 import os
+__version__ = None
+exec(open("spynnaker_extra_pynn_models/_version.py").read())
+assert __version__
 
 # Build a list of all project modules, as well as supplementary files
 main_package = "spynnaker_extra_pynn_models"
@@ -25,9 +28,9 @@ for dirname, dirnames, filenames in os.walk(main_package_dir):
 
 setup(
     name="sPyNNakerExtraModelsPlugin",
-    version="3.0.0",
+    version=__version__,
     description="Extra models not in PyNN",
     url="https://github.com/SpiNNakerManchester/sPyNNakerExtraModelsPlugin",
     packages=packages, package_data=package_data,
-    install_requires=['SpyNNaker >= 4.0.0, < 5.0.0']
+    install_requires=['SpyNNaker >= 1!4.0.0a5, < 1!5.0.0']
 )
