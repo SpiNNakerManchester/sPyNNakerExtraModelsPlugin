@@ -1,14 +1,25 @@
 from data_specification.enums.data_type import DataType
+from spynnaker.pyNN.models.neuron.plasticity.stdp.weight_dependence.\
+    abstract_has_a_plus_a_minus import AbstractHasAPlusAMinus
 from spynnaker.pyNN.models.neuron.plasticity.stdp.weight_dependence\
     .abstract_weight_dependence import AbstractWeightDependence
 
 
-class WeightDependenceAdditiveTriplet(AbstractWeightDependence):
+class WeightDependenceAdditiveTriplet(
+        AbstractWeightDependence, AbstractHasAPlusAMinus):
+
+    default_parameters = {'w_min': 0.0, 'w_max': 1.0, 'A3_plus': 0.01,
+                          'A3_minus': 0.01}
 
     # noinspection PyPep8Naming
     def __init__(
-            self, w_min=0.0, w_max=1.0, A3_plus=0.01, A3_minus=0.01):
+            self, w_min=default_parameters['w_min'],
+            w_max=default_parameters['w_max'],
+            A3_plus=default_parameters['A3_plus'],
+            A3_minus=default_parameters['A3_minus']):
+
         AbstractWeightDependence.__init__(self)
+        AbstractHasAPlusAMinus.__init__(self)
         self._w_min = w_min
         self._w_max = w_max
         self._a3_plus = A3_plus
