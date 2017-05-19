@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------
 
 typedef struct additional_input_t {
-
     // exp ( -(machine time step in ms)/(TauCa) )
     REAL    exp_TauCa;
 
@@ -19,7 +18,6 @@ typedef struct additional_input_t {
 
     // Influx of CA2 caused by each spike
     REAL    I_alpha;
-
 } additional_input_t;
 
 static input_t additional_input_get_input_value_as_current(

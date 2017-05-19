@@ -13,23 +13,22 @@ plasticity_trace_region_data_t plasticity_trace_region_data;
 //---------------------------------------
 // Functions
 //---------------------------------------
-uint32_t *timing_initialise(address_t address) {
-
+uint32_t *timing_initialise(
+	address_t address)
+{
     log_info("timing_initialise: starting");
     log_info("\tRecurrent dual-FSM STDP rule");
 
     // Copy plasticity region data from address
     // **NOTE** this seems somewhat safer than relying on sizeof
     plasticity_trace_region_data.accumulator_depression_plus_one =
-        (int32_t) address[0];
+	    (int32_t) address[0];
     plasticity_trace_region_data.accumulator_potentiation_minus_one =
-        (int32_t) address[1];
+	    (int32_t) address[1];
 
     log_info("\tAccumulator depression=%d, Accumulator potentiation=%d",
-             plasticity_trace_region_data
-             .accumulator_depression_plus_one - 1,
-             plasticity_trace_region_data
-             .accumulator_potentiation_minus_one + 1);
+             plasticity_trace_region_data.accumulator_depression_plus_one - 1,
+             plasticity_trace_region_data.accumulator_potentiation_minus_one + 1);
 
     // Copy LUTs from following memory
     // **HACK** these aren't actually int16_t-based but this function will

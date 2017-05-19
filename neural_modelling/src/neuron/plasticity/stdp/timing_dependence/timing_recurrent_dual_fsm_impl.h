@@ -36,13 +36,16 @@ extern plasticity_trace_region_data_t plasticity_trace_region_data;
 //---------------------------------------
 // Timing dependence inline functions
 //---------------------------------------
-static inline post_trace_t timing_get_initial_post_trace() {
+static inline post_trace_t timing_get_initial_post_trace(void) {
     return 0;
 }
 
 //---------------------------------------
 static inline post_trace_t timing_add_post_spike(
-        uint32_t time, uint32_t last_time, post_trace_t last_trace) {
+        uint32_t time,
+	uint32_t last_time,
+	post_trace_t last_trace)
+{
     use(&time);
     use(&last_time);
     use(&last_trace);
@@ -50,8 +53,8 @@ static inline post_trace_t timing_add_post_spike(
     // Pick random number and use to draw from exponential distribution
     uint32_t random = mars_kiss_fixed_point();
     uint16_t window_length = post_exp_dist_lookup[random];
-    log_debug("\t\tResetting post-window: random=%d, window_length=%u", random,
-              window_length);
+    log_debug("\t\tResetting post-window: random=%d, window_length=%u",
+	    random, window_length);
 
     // Return window length
     return window_length;
@@ -59,7 +62,10 @@ static inline post_trace_t timing_add_post_spike(
 
 //---------------------------------------
 static inline pre_trace_t timing_add_pre_spike(
-        uint32_t time, uint32_t last_time, pre_trace_t last_trace) {
+        uint32_t time,
+	uint32_t last_time,
+	pre_trace_t last_trace)
+{
     use(&time);
     use(&last_time);
     use(&last_trace);
@@ -67,8 +73,8 @@ static inline pre_trace_t timing_add_pre_spike(
     // Pick random number and use to draw from exponential distribution
     uint32_t random = mars_kiss_fixed_point();
     uint16_t window_length = pre_exp_dist_lookup[random];
-    log_debug("\t\tResetting pre-window: random=%d, window_length=%u", random,
-              window_length);
+    log_debug("\t\tResetting pre-window: random=%d, window_length=%u",
+	    random, window_length);
 
     // Return window length
     return window_length;
@@ -76,9 +82,14 @@ static inline pre_trace_t timing_add_pre_spike(
 
 //---------------------------------------
 static inline update_state_t timing_apply_pre_spike(
-        uint32_t time, pre_trace_t trace, uint32_t last_pre_time,
-        pre_trace_t last_pre_trace, uint32_t last_post_time,
-        post_trace_t last_post_trace, update_state_t previous_state) {
+        uint32_t time,
+	pre_trace_t trace,
+	uint32_t last_pre_time,
+        pre_trace_t last_pre_trace,
+	uint32_t last_post_time,
+        post_trace_t last_post_trace,
+	update_state_t previous_state)
+{
     use(&trace);
     use(&last_pre_time);
     use(&last_pre_trace);
@@ -87,25 +98,21 @@ static inline update_state_t timing_apply_pre_spike(
     uint32_t time_since_last_post = time - last_post_time;
 
     log_debug("\t\t\ttime_since_last_post:%u, post_window_length:%u",
-              time_since_last_post, last_post_trace);
+	    time_since_last_post, last_post_trace);
 
     // If spikes don't coincide
     if (time_since_last_post > 0) {
-
         // If this pre-spike has arrived within the last post window
         if (time_since_last_post < last_post_trace) {
-
             if (previous_state.accumulator >
                     plasticity_trace_region_data
                     .accumulator_depression_plus_one) {
-
                 // If accumulator's not going to hit depression limit,
                 // decrement it
                 previous_state.accumulator--;
                 log_debug("\t\t\t\tDecrementing accumulator=%d",
                           previous_state.accumulator);
             } else {
-
                 // Otherwise, reset accumulator and apply depression
                 log_debug("\t\t\t\tApplying depression");
 
@@ -121,9 +128,14 @@ static inline update_state_t timing_apply_pre_spike(
 
 //---------------------------------------
 static inline update_state_t timing_apply_post_spike(
-        uint32_t time, post_trace_t trace, uint32_t last_pre_time,
-        pre_trace_t last_pre_trace, uint32_t last_post_time,
-        post_trace_t last_post_trace, update_state_t previous_state) {
+        uint32_t time,
+	post_trace_t trace,
+	uint32_t last_pre_time,
+        pre_trace_t last_pre_trace,
+	uint32_t last_post_time,
+        post_trace_t last_post_trace,
+	update_state_t previous_state)
+{
     use(&trace);
     use(&last_post_time);
     use(&last_post_trace);
@@ -136,22 +148,17 @@ static inline update_state_t timing_apply_post_spike(
 
     // If spikes don't coincide
     if (time_since_last_pre > 0) {
-
         // If this post-spike has arrived within the last pre window
         if (time_since_last_pre < last_pre_trace) {
-
-
             if (previous_state.accumulator
                     < plasticity_trace_region_data
                       .accumulator_potentiation_minus_one) {
-
                 // If accumulator's not going to hit potentiation limit,
                 // increment it
                 previous_state.accumulator++;
                 log_debug("\t\t\t\tIncrementing accumulator=%d",
                           previous_state.accumulator);
             } else {
-
                 // Otherwise, reset accumulator and apply potentiation
                 log_debug("\t\t\t\tApplying potentiation");
 
