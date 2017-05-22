@@ -10,17 +10,14 @@
 typedef struct threshold_type_t {
     // sensitivity of soft threshold to membrane voltage [mV^(-1)]
     // (inverted in python code)
-    REAL     du_th_inv;
-
+    REAL du_th_inv;
     // time constant for soft threshold [ms^(-1)]
     // (inverted in python code)
-    REAL     tau_th_inv;
-
+    REAL tau_th_inv;
     // soft threshold value  [mV]
-    REAL     v_thresh;
-
+    REAL v_thresh;
     //
-    REAL     machine_time_step_ms_div_10;
+    REAL machine_time_step_ms_div_10;
 } threshold_type_t;
 
 static inline bool threshold_type_is_above_threshold(
@@ -36,12 +33,12 @@ static inline bool threshold_type_is_above_threshold(
     // (result --> prob_saturation).
     UREAL result;
     if (exponent < 5.0k) {
-        REAL hazard = expk(exponent) * threshold_type->tau_th_inv;
-        result = (1. - expk(-hazard *
-                            threshold_type->machine_time_step_ms_div_10)) *
-                  PROB_SATURATION;
+	REAL hazard = expk(exponent) * threshold_type->tau_th_inv;
+	result = (1. - expk(-hazard *
+		threshold_type->machine_time_step_ms_div_10)) *
+			PROB_SATURATION;
     } else {
-        result = PROB_SATURATION;
+	result = PROB_SATURATION;
     }
 
     return REAL_COMPARE(result, >=, random_number);

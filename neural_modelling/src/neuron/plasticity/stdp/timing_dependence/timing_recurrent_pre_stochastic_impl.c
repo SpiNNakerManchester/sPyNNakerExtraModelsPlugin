@@ -1,3 +1,6 @@
+#include "synapse_type.h"
+#include "weight.h"
+#include "timing.h"
 #include "timing_recurrent_pre_stochastic_impl.h"
 
 //---------------------------------------

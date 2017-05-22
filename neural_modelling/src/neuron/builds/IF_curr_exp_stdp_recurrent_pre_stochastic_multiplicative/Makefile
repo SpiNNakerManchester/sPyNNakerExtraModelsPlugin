@@ -1,7 +1,5 @@
 APP = $(notdir $(CURDIR))
 BUILD_DIR = build/
-$(info Making directory $(BUILD_DIR))
-$(shell mkdir -p $(BUILD_DIR))
 
 NEURON_MODEL = $(SOURCE_DIR)/neuron/models/neuron_model_lif_impl.c
 NEURON_MODEL_H = $(SOURCE_DIR)/neuron/models/neuron_model_lif_impl.h
@@ -14,4 +12,4 @@ TIMING_DEPENDENCE_H = $(EXTRA_SRC_DIR)/neuron/plasticity/stdp/timing_dependence/
 WEIGHT_DEPENDENCE = $(SOURCE_DIR)/neuron/plasticity/stdp/weight_dependence/weight_multiplicative_impl.c
 WEIGHT_DEPENDENCE_H = $(SOURCE_DIR)/neuron/plasticity/stdp/weight_dependence/weight_multiplicative_impl.h
 
-include $(abspath $(CURDIR)/../common.mk)
+include ../common.mk

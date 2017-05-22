@@ -1,3 +1,6 @@
+#include "synapse_type.h"
+#include "weight.h"
+#include "timing.h"
 #include "timing_recurrent_dual_fsm_impl.h"
 
 //---------------------------------------
@@ -27,16 +30,18 @@ uint32_t *timing_initialise(
 	    (int32_t) address[1];
 
     log_info("\tAccumulator depression=%d, Accumulator potentiation=%d",
-             plasticity_trace_region_data.accumulator_depression_plus_one - 1,
-             plasticity_trace_region_data.accumulator_potentiation_minus_one + 1);
+	    plasticity_trace_region_data.accumulator_depression_plus_one - 1,
+	    plasticity_trace_region_data.accumulator_potentiation_minus_one + 1);
 
     // Copy LUTs from following memory
     // **HACK** these aren't actually int16_t-based but this function will
     // still work fine
     address_t lut_address = maths_copy_int16_lut(
-        &address[2], STDP_FIXED_POINT_ONE, (int16_t*) &pre_exp_dist_lookup[0]);
+	    &address[2], STDP_FIXED_POINT_ONE,
+	    (int16_t*) &pre_exp_dist_lookup[0]);
     lut_address = maths_copy_int16_lut(
-        lut_address, STDP_FIXED_POINT_ONE, (int16_t*) &post_exp_dist_lookup[0]);
+	    lut_address, STDP_FIXED_POINT_ONE,
+	    (int16_t*) &post_exp_dist_lookup[0]);
 
     log_info("timing_initialise: completed successfully");
 

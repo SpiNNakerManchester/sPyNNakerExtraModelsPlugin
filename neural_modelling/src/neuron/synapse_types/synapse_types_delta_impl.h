@@ -7,7 +7,6 @@
 * (and thus propogators) are identical.
 */
 
-
 #ifndef _SYNAPSE_TYPES_DELTA_IMPL_H_
 #define _SYNAPSE_TYPES_DELTA_IMPL_H_
 
@@ -46,7 +45,7 @@ typedef enum input_buffer_regions {
 //! \param[in]  parameter: the pointer to the parameters to use
 //! \return nothing
 static inline void synapse_types_shape_input(
-        synapse_param_pointer_t parameter) {
+	synapse_param_pointer_t parameter) {
     parameter->input_buffer_excitatory_value = 0;
     parameter->input_buffer_inhibitory_value = 0;
 }
@@ -61,12 +60,12 @@ static inline void synapse_types_shape_input(
 static inline void synapse_types_add_neuron_input(
 	index_t synapse_type_index,
 	synapse_param_pointer_t parameter,
-        input_t input)
+	input_t input)
 {
     if (synapse_type_index == EXCITATORY) {
-        parameter->input_buffer_excitatory_value += input;
+	parameter->input_buffer_excitatory_value += input;
     } else if (synapse_type_index == INHIBITORY) {
-        parameter->input_buffer_inhibitory_value += input;
+	parameter->input_buffer_inhibitory_value += input;
     }
 }
 
@@ -75,7 +74,7 @@ static inline void synapse_types_add_neuron_input(
 //! \param[in]  parameter: the pointer to the parameters to use
 //! \return the excitatory input buffers for a given neuron id.
 static inline input_t synapse_types_get_excitatory_input(
-        synapse_param_pointer_t parameter) {
+	synapse_param_pointer_t parameter) {
     return parameter->input_buffer_excitatory_value;
 }
 
@@ -84,7 +83,7 @@ static inline input_t synapse_types_get_excitatory_input(
 //! \param[in]  parameter: the pointer to the parameters to use
 //! \return the inhibitory input buffers for a given neuron id.
 static inline input_t synapse_types_get_inhibitory_input(
-        synapse_param_pointer_t parameter) {
+	synapse_param_pointer_t parameter) {
     return parameter->input_buffer_inhibitory_value;
 }
 
@@ -94,14 +93,14 @@ static inline input_t synapse_types_get_inhibitory_input(
 //! (there is a specific index interpretation in each synapse type)
 //! \return a human readable character representing the synapse type.
 static inline const char *synapse_types_get_type_char(
-        index_t synapse_type_index) {
+	index_t synapse_type_index) {
     if (synapse_type_index == EXCITATORY) {
-        return "X";
+	return "X";
     } else if (synapse_type_index == INHIBITORY) {
-        return "I";
+	return "I";
     } else {
-        log_debug("did not recognise synapse type %i", synapse_type_index);
-        return "?";
+	log_debug("did not recognise synapse type %i", synapse_type_index);
+	return "?";
     }
 }
 
@@ -111,17 +110,16 @@ static inline const char *synapse_types_get_type_char(
 //! \param[in]  parameter: the pointer to the parameters to use
 //! \return Nothing
 static inline void synapse_types_print_input(
-        synapse_param_pointer_t parameter) {
-    io_printf(
-        IO_BUF, "%12.6k - %12.6k",
-        parameter->input_buffer_excitatory_value,
-        parameter->input_buffer_inhibitory_value);
+	synapse_param_pointer_t parameter) {
+    io_printf(IO_BUF, "%12.6k - %12.6k",
+	    parameter->input_buffer_excitatory_value,
+	    parameter->input_buffer_inhibitory_value);
 }
 
 //! \brief printer call
 //! \param[in] parameter: the pointer to the parameters to print
 static inline void synapse_types_print_parameters(
-        synapse_param_pointer_t parameter) {
+	synapse_param_pointer_t parameter) {
     synapse_types_print_input(parameter);
 }
 
