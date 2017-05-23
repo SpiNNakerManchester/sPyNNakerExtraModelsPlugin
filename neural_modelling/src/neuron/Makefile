@@ -14,7 +14,7 @@ MODELS = IF_cond_exp_stoc \
 BUILD_DIRS := $(addprefix builds/, $(MODELS))
 
 all: $(BUILD_DIRS)
-	for d in $(BUILD_DIRS); do $(MAKE) -p --debug=vij -C $$d all || exit $$?; done
+	for d in $(BUILD_DIRS); do $(MAKE) -C $$d all || exit $$?; done
 
 clean: $(BUILD_DIRS)
 	for d in $(BUILD_DIRS); do $(MAKE) -C $$d clean || exit $$?; done

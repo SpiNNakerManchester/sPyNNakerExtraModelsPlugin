@@ -1,5 +1,5 @@
 APP = $(notdir $(CURDIR))
-BUILD_DIR = $(abspath $(CURDIR)/build)/
+BUILD_DIR = build/
 $(info Making directory $(BUILD_DIR))
 $(shell mkdir -p $(BUILD_DIR))
 
