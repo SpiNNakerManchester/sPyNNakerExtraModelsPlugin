@@ -1,3 +1,4 @@
+STDP := $(TIMING_DEPENDENCE) $(WEIGHT_DEPENDENCE)
 include ../../../paths.mk
 include $(NEURAL_MODELLING_DIRS)/src/paths.mk
 include $(NEURAL_MODELLING_DIRS)/src/neuron/builds/classes.mk
