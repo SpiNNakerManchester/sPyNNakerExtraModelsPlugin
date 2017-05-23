@@ -28,7 +28,7 @@ typedef struct synapse_param_t {
     input_t input_buffer_inhibitory_value;
 } synapse_param_t;
 
-#include <neuron/synapse_types/synapse_types.h>
+#include <neuron/synapse_types/synapse_types_interface.h>
 
 typedef enum input_buffer_regions {
     EXCITATORY, INHIBITORY,
