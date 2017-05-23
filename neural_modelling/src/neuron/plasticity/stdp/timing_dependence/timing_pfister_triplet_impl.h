@@ -22,8 +22,8 @@ typedef struct pre_trace_t {
 #include <debug.h>
 
 // Include generic plasticity maths functions
-#include "../../common/maths.h"
-#include "../../common/stdp_typedefs.h"
+#include "neuron/plasticity/common/maths.h"
+#include "neuron/plasticity/common/stdp_typedefs.h"
 
 //---------------------------------------
 // Macros
