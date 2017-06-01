@@ -26,7 +26,7 @@ typedef int16_t pre_trace_t;
 #define TAU_SIZE 256
 
 // Helper macros for looking up decays
-#define DECAY_LOOKUP_TAU(time)  \
+#define DECAY_LOOKUP_TAU(time) \
     maths_lut_exponential_decay(time, TAU_TIME_SHIFT, TAU_SIZE, tau_lookup)
 
 //---------------------------------------
