@@ -44,7 +44,7 @@ script:
   - py.test unittests
   - flake8 examples spynnaker_extra_pynn_models
   - flake8 unittests
-  - support/run-vera.sh neural_modelling
+  - support/run-vera.sh neural_modelling -P max-path-length=120 -P max-filename-length=60
   - cd doc/source
   - sphinx-build -T -E -b html -d _build/doctrees-readthedocsdirhtml -D language=en . _build/html
   - sphinx-build -T -b json -d _build/doctrees-json -D language=en . _build/json
