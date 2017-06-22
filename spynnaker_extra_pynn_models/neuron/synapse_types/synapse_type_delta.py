@@ -1,4 +1,4 @@
-from data_specification.enums.data_type import DataType
+from data_specification.enums import DataType
 from spynnaker.pyNN.models.neural_properties.neural_parameter import \
     NeuronParameter
 from spynnaker.pyNN.models.neuron.synapse_types.abstract_synapse_type \
