@@ -2,10 +2,9 @@ import math
 
 from data_specification.enums import DataType
 
-from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence.\
-    abstract_timing_dependence import AbstractTimingDependence
-from spynnaker_extra_pynn_models.neuron.plasticity.stdp\
-    .synapse_structure.synapse_structure_weight_accumulator \
+from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence \
+    import AbstractTimingDependence
+from spynnaker_extra_pynn_models.neuron.plasticity.stdp.synapse_structure \
     import SynapseStructureWeightAccumulator
 from spynnaker.pyNN.models.neuron.plasticity.stdp.common \
     import plasticity_helpers
