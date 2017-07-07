@@ -12,9 +12,12 @@ MODELS = IF_cond_exp_stoc \
          IF_curr_exp_stdp_mad_pfister_triplet_additive \
          IF_cond_exp_stdp_mad_nearest_pair_additive
 BUILD_DIRS := $(addprefix builds/, $(MODELS))
+MAKE_DEBUG_OPT =
+#MAKE_DEBUG_OPT = --debug=vij 
+#MAKE_DEBUG_OPT = -p --debug=vij 
 
 all: $(BUILD_DIRS)
-	for d in $(BUILD_DIRS); do (cd $$d; "$(MAKE)") || exit $$?; done
+	for d in $(BUILD_DIRS); do $(MAKE) -C $$d $(MAKE_DEBUG_OPT) all || exit $$?; done
 
 clean: $(BUILD_DIRS)
-	for d in $(BUILD_DIRS); do (cd $$d; "$(MAKE)" clean) || exit $$?; done
+	for d in $(BUILD_DIRS); do $(MAKE) -C $$d $(MAKE_DEBUG_OPT) clean || exit $$?; done
