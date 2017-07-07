@@ -1,8 +1,8 @@
-from data_specification.enums.data_type import DataType
-from spynnaker.pyNN.models.neuron.plasticity.stdp.weight_dependence.\
-    abstract_has_a_plus_a_minus import AbstractHasAPlusAMinus
+from data_specification.enums import DataType
 from spynnaker.pyNN.models.neuron.plasticity.stdp.weight_dependence\
-    .abstract_weight_dependence import AbstractWeightDependence
+    import AbstractHasAPlusAMinus
+from spynnaker.pyNN.models.neuron.plasticity.stdp.weight_dependence\
+    import AbstractWeightDependence
 
 
 class WeightDependenceAdditiveTriplet(
