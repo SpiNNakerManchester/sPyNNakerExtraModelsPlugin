@@ -39,6 +39,7 @@ class SynapseTypeCombExp5E5I(AbstractSynapseType):
 
     def __init__(self,
                 n_neurons,
+
                 # excitatory
                 exc_a_response,
                 exc_a_A,

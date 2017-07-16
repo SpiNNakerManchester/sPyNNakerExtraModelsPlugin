@@ -34,22 +34,16 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
     def __init__(self,
                 n_neurons,
 
-                exc_response,
-
                 exc_a_response,
                 exc_a_A,
                 exc_a_tau,
-
                 exc_b_response,
                 exc_b_B,
                 exc_b_tau,
 
-                inh_response,
-
                 inh_a_response,
                 inh_a_A,
                 inh_a_tau,
-
                 inh_b_response,
                 inh_b_B,
                 inh_b_tau):
@@ -57,26 +51,19 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
         AbstractSynapseType.__init__(self)
         self._n_neurons = n_neurons
 
-        self._exc_response = utility_calls.convert_param_to_numpy(exc_response, n_neurons)
-
         self._exc_a_response = utility_calls.convert_param_to_numpy(exc_a_response, n_neurons)
         self._exc_a_A = utility_calls.convert_param_to_numpy(exc_a_A, n_neurons)
         self._exc_a_tau = utility_calls.convert_param_to_numpy(exc_a_tau, n_neurons)
-
         self._exc_b_response = utility_calls.convert_param_to_numpy(exc_b_response, n_neurons)
         self._exc_b_B = utility_calls.convert_param_to_numpy(exc_b_B, n_neurons)
         self._exc_b_tau = utility_calls.convert_param_to_numpy(exc_b_tau, n_neurons)
 
-        self._inh_response = utility_calls.convert_param_to_numpy(inh_response, n_neurons)
-
         self._inh_a_response = utility_calls.convert_param_to_numpy(inh_a_response, n_neurons)
         self._inh_a_A = utility_calls.convert_param_to_numpy(inh_a_A, n_neurons)
         self._inh_a_tau = utility_calls.convert_param_to_numpy(inh_a_tau, n_neurons)
-
         self._inh_b_response = utility_calls.convert_param_to_numpy(inh_b_response, n_neurons)
         self._inh_b_B = utility_calls.convert_param_to_numpy(inh_b_B, n_neurons)
         self._inh_b_tau = utility_calls.convert_param_to_numpy(inh_b_tau, n_neurons)
-
 
 
     @property
@@ -105,6 +92,7 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
     def exc_a_tau(self, exc_a_tau):
         self._exc_a_tau = utility_calls.convert_param_to_numpy(
             exc_a_tau, self._n_neurons)
+        self.exc_a_A, self.exc_b_B = set_excitatory_scalar(self._exc_a_tau, self._exc_b_tau)
 
     @property
     def exc_b_response(self):
@@ -132,8 +120,7 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
     def exc_b_tau(self, exc_b_tau):
         self._exc_b_tau = utility_calls.convert_param_to_numpy(
             exc_b_tau, self._n_neurons)
-
-
+        self.exc_a_A, self.exc_b_B = set_excitatory_scalar(self._exc_a_tau, self._exc_b_tau)
 
     @property
     def inh_a_response(self):
@@ -218,12 +205,6 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
             self._inh_a_tau, machine_time_step)
         i_b_decay, i_b_init = get_exponential_decay_and_init(
             self._inh_b_tau, machine_time_step)
-
-
-        print "ex_a: decay = {}, init: {}".format(e_a_decay/float(pow(2, 32)), e_a_init/float(pow(2, 32)))
-        print "ex_b: decay = {}, init: {}".format(e_b_decay/float(pow(2, 32)), e_b_init/float(pow(2, 32)))
-        print "inh: decay = {}, init: {}".format(i_a_decay/float(pow(2, 32)), i_a_init/float(pow(2, 32)))
-        print "inh: decay = {}, init: {}".format(i_b_decay/float(pow(2, 32)), i_b_init/float(pow(2, 32)))
 
         return [
             NeuronParameter(self._exc_response, _COMB_EXP_TYPES.RESPONSE.data_type),
