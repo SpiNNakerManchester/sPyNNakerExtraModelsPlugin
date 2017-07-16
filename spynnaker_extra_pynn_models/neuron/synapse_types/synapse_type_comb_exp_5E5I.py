@@ -437,7 +437,6 @@ class SynapseTypeCombExp5E5I(AbstractSynapseType):
         self._exc4_a_A, self._exc4_b_B = set_excitatory_scalar(self._exc4_a_tau, self._exc4_b_tau)
 
     # excitatory5
-
     @property
     def exc5_a_response(self):
         return self._exc5_a_response
@@ -671,7 +670,6 @@ class SynapseTypeCombExp5E5I(AbstractSynapseType):
 
 
     # inhibitory4
-
     @property
     def inh4_a_response(self):
         return self._inh4_a_response
@@ -729,7 +727,6 @@ class SynapseTypeCombExp5E5I(AbstractSynapseType):
         self._inh4_a_A, self._inh4_b_B = set_excitatory_scalar(self._inh4_a_tau, self._inh4_b_tau)
 
     # inhibitory5
-
     @property
     def inh5_a_response(self):
         return self._inh5_a_response
@@ -817,7 +814,7 @@ class SynapseTypeCombExp5E5I(AbstractSynapseType):
         return "excitatory", "excitatory2", "excitatory3", "excitatory4", "excitatory5", "inhibitory", "inhibitory2", "inhibitory3", "inhibitory4", "inhibitory5"
 
     def get_n_synapse_type_parameters(self):
-        return 10*9
+        return 10*8
 
     @inject_items({"machine_time_step": "MachineTimeStep"})
     def get_synapse_type_parameters(self, machine_time_step):

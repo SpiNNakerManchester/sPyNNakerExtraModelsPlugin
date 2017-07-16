@@ -345,7 +345,7 @@ class SynapseTypeCombExp2E2I(AbstractSynapseType):
         return "excitatory", "excitatory2", "inhibitory", "inhibitory2"
 
     def get_n_synapse_type_parameters(self):
-        return 4*9
+        return 4*8
 
     @inject_items({"machine_time_step": "MachineTimeStep"})
     def get_synapse_type_parameters(self, machine_time_step):

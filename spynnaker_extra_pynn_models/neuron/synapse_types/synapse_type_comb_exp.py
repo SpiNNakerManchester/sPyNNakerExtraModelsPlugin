@@ -148,6 +148,7 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
     def inh_a_tau(self, inh_a_tau):
         self._inh_a_tau = utility_calls.convert_param_to_numpy(
             inh_a_tau, self._n_neurons)
+        self.inh_a_A, self.inh_b_B = set_excitatory_scalar(self._inh_a_tau, self._inh_b_tau)
 
     @property
     def inh_b_response(self):
@@ -175,6 +176,7 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
     def inh_b_tau(self, inh_b_tau):
         self._inh_b_tau = utility_calls.convert_param_to_numpy(
             inh_b_tau, self._n_neurons)
+        self.inh_a_A, self.inh_b_B = set_excitatory_scalar(self._inh_a_tau, self._inh_b_tau)
 
 
     def get_n_synapse_types(self):
@@ -192,7 +194,7 @@ class SynapseTypeCombinedExponential(AbstractSynapseType):
         return "excitatory",  "inhibitory"
 
     def get_n_synapse_type_parameters(self):
-        return  18
+        return  2*8
 
     @inject_items({"machine_time_step": "MachineTimeStep"})
     def get_synapse_type_parameters(self, machine_time_step):
