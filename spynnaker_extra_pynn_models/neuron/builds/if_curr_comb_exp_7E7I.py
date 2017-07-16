@@ -1,8 +1,8 @@
 from spynnaker.pyNN.models.neuron.neuron_models\
     .neuron_model_leaky_integrate_and_fire \
     import NeuronModelLeakyIntegrateAndFire
-from spynnaker_extra_pynn_models.neuron.synapse_types.synapse_type_comb_exp_5E5I\
-    import SynapseTypeCombExp5E5I
+from spynnaker_extra_pynn_models.neuron.synapse_types.synapse_type_comb_exp_7E7I\
+    import SynapseTypeCombExp7E7I
 from spynnaker.pyNN.models.neuron.input_types.input_type_current \
     import InputTypeCurrent
 from spynnaker.pyNN.models.neuron.threshold_types.threshold_type_static \
@@ -17,7 +17,7 @@ class IFCurrCombExp7E7I(AbstractPopulationVertex):
         synaptic response = Ae^(-t/tau_a) + Be^(-t/tau_b)
     """
 
-    _max_feasible_max_atoms_per_core = 32
+    _max_feasible_max_atoms_per_core = 16
     _model_based_max_atoms_per_core = _max_feasible_max_atoms_per_core
 
     baseline_defaults = {
@@ -293,7 +293,7 @@ class IFCurrCombExp7E7I(AbstractPopulationVertex):
             n_neurons, v_init, v_rest, tau_m, cm, i_offset,
             v_reset, tau_refrac)
 
-        synapse_type = SynapseTypeCombExp5E5I(
+        synapse_type = SynapseTypeCombExp7E7I(
                 n_neurons,
 
                 # excitatory
@@ -412,20 +412,20 @@ class IFCurrCombExp7E7I(AbstractPopulationVertex):
         threshold_type = ThresholdTypeStatic(n_neurons, v_thresh)
 
         AbstractPopulationVertex.__init__(
-            self, n_neurons=n_neurons, binary="IF_curr_comb_exp_5E5I.aplx", label=label,
-            max_atoms_per_core=IFCurrCombExp5E5I._model_based_max_atoms_per_core,
+            self, n_neurons=n_neurons, binary="IF_curr_comb_exp_7E7I.aplx", label=label,
+            max_atoms_per_core=IFCurrCombExp7E7I._model_based_max_atoms_per_core,
             spikes_per_second=spikes_per_second,
             ring_buffer_sigma=ring_buffer_sigma,
             incoming_spike_buffer_size=incoming_spike_buffer_size,
-            model_name="IF_curr_comb_exp_5E5I", neuron_model=neuron_model,
+            model_name="IF_curr_comb_exp_7E7I", neuron_model=neuron_model,
             input_type=input_type, synapse_type=synapse_type,
-            threshold_type=threshold_type, constraints=constraints, max_feasible_atoms_per_core=IFCurrCombExp5E5I._max_feasible_max_atoms_per_core)
+            threshold_type=threshold_type, constraints=constraints, max_feasible_atoms_per_core=IFCurrCombExp7E7I._max_feasible_max_atoms_per_core)
 
     @staticmethod
     def set_model_max_atoms_per_core(new_value):
-        IFCurrCombExp5E5I._model_based_max_atoms_per_core = new_value
+        IFCurrCombExp7E7I._model_based_max_atoms_per_core = new_value
 
     @staticmethod
     def get_max_atoms_per_core():
-        return IFCurrCombExp5E5I._model_based_max_atoms_per_core
+        return IFCurrCombExp7E7I._model_based_max_atoms_per_core
 
