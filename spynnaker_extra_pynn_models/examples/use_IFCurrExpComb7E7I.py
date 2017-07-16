@@ -69,7 +69,6 @@ exc_proj5 = p.Projection(pop_src_exc, pop_ex,
         p.OneToOneConnector(weights=1, delays=9*d), target="excitatory5")
 exc_proj6 = p.Projection(pop_src_exc, pop_ex,
         p.OneToOneConnector(weights=1, delays=11*d), target="excitatory6")
-
 exc_proj7 = p.Projection(pop_src_exc, pop_ex,
         p.OneToOneConnector(weights=1, delays=13*d), target="excitatory7")
 
