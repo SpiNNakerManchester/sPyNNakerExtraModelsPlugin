@@ -1,12 +1,11 @@
-
 from spynnaker.pyNN.models.neuron.plasticity.stdp.common \
     import plasticity_helpers
 from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence\
-    .abstract_timing_dependence import AbstractTimingDependence
-from spynnaker.pyNN.models.neuron.plasticity.stdp.synapse_structure\
-    .synapse_structure_weight_only import SynapseStructureWeightOnly
-from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence.\
-    timing_dependence_spike_pair import TimingDependenceSpikePair
+    import AbstractTimingDependence
+from spynnaker.pyNN.models.neuron.plasticity.stdp.synapse_structure \
+    import SynapseStructureWeightOnly
+from spynnaker.pyNN.models.neuron.plasticity.stdp.timing_dependence \
+    import TimingDependenceSpikePair
 
 import logging
 
