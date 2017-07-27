@@ -1,4 +1,4 @@
-from spynnaker7.pyNN.extra_models import *
+from spynnaker7.pyNN.extra_models import *  # NOQA
 
 import warnings
 
