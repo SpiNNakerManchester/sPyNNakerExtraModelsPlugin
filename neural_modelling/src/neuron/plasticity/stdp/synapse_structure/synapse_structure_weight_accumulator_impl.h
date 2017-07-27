@@ -35,10 +35,9 @@ static inline update_state_t synapse_structure_get_update_state(
 
     //log_info("InSz: plastic_synapse_t %d, weight_state_t: %d, accumulator: %d\n", sizeof(synaptic_word), sizeof(synaptic_word.weight), sizeof(synaptic_word.accumulator));
     //log_info("ss_get_update_state W: %d, A: %d\n", synaptic_word.weight, synaptic_word.accumulator);
-    update_state.weight_state = weight_get_initial(synaptic_word.weight,
-                                                   synapse_type);
+    update_state.weight_state = weight_get_initial(synaptic_word.weight, synapse_type);
     update_state.accumulator = (int32_t) synaptic_word.accumulator;
-	update_state.pre_waiting_post = true;
+	update_state.pre_waiting_post = true; // This synapse has been fetched because the pre-synaptic neuron fired!
 	update_state.longest_post_pre_window_closing_time = 0;
 	//log_info("ss_out W: %d, A: %d\n", update_state.weight_state, update_state.accumulator);
 	//log_info("OutSz: update_state %d, weight_state: %d, accumulator: %d, prewaitpost: %d, longwin: %d\n", sizeof(update_state), \
